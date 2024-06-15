@@ -1,0 +1,40 @@
+{% from "macros.html" import create_navlink %}
+
+<style>
+    /* Custom CSS to change active link color */
+    .navbar-nav .nav-link.active {
+        color: #f1f5f2; /* Change this to your desired bright color */
+    }
+    .navbar-brand h2 {
+       
+        font-family: 'Roboto', sans-serif; /* Use the elegant Roboto font */
+        font-weight: 100; /* Make the text thin */
+        margin: 0; /* Ensure no extra margins around the text */
+    }
+    .navbar-brand img {
+        height: 50px;
+        width: 50px;
+        object-fit: cover;
+        border-radius: 50%; /* Make the image circular */
+        margin-right: 10px; /* Optional: Add some space between the image and the text */
+    }
+</style>
+<nav class="navbar navbar-expand-lg" style="background-color: pink;">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <img src="{{ url_for('static', filename='img3.jpg') }}" alt="BoxSpot Logo">
+            <h4 style="display: inline-block;">Boxspot</h4>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                {{ create_navlink('main.home', 'Home') }}
+                {{ create_navlink('products.products', 'Products') }}
+                {{ create_navlink('main.contact', 'Contact') }}
+            </div>
+        </div>
+    </div>
+</nav>
