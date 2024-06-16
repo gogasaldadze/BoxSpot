@@ -1,4 +1,72 @@
-{%extends  "layouts/base.html"%}
-{%block body%}
-<h3> this is contact page</h3>
-{%endblock%}
+{% extends "layouts/base.html" %}
+
+{% block styles %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f9fa; /* Set background color */
+    }
+    .container {
+        width: 80%; /* Set width to 80% of the viewport */
+        margin: 50px auto; /* Center the container horizontally */
+        padding: 20px;
+        background-color: #f2f2f2; /* Set container background color */
+        border-radius: 10px; /* Add border radius for container */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box shadow for container */
+    }
+    h2 {
+        margin-bottom: 20px;
+        color: #007bff; /* Set heading color */
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    th, td {
+        padding: 15px; /* Increase padding for cells */
+        border-bottom: 1px solid #dee2e6; /* Change border color */
+    }
+    th {
+        background-color: #f8f9fa; /* Change header background color */
+        text-align: left;
+        font-weight: bold; /* Make table headers bold */
+        padding-bottom: 15px; /* Add extra padding below headers */
+    }
+    td {
+        padding-top: 10px; /* Add padding above cell content */
+    }
+    a {
+        color: #007bff;
+        text-decoration: none;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h2>საკონტაქტო ინფორმაცია</h2>
+    <hr>
+    <table>
+        <tr>
+            <th><i class="fas fa-envelope"></i> <b>ელ.ფოსტა</b></th>
+            <td><a href="mailto:saldadzegoga@gmail.com">saldadzegoga@gmail.com</a></td>
+        </tr>
+        <tr>
+            <th><i class="fas fa-phone"></i> ტელეფონი</th>
+            <td><a href="tel:+995598609901">+995 598 609 901</a></td>
+        </tr>
+        <tr>
+            <th><i class="fas fa-map-marker-alt"></i> მისამართი</th>
+            <td>23 Merab Kostava St, Tbilisi 0183</td>
+        </tr>
+    </table>
+ 
+    <br> <br> <br>
+
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2978.6467774392013!2d44.782860389950045!3d41.706560397160096!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x404473409616f6d3%3A0xfde656d925825092!2sBoxspot__!5e0!3m2!1sen!2sge!4v1718560453718!5m2!1sen!2sge" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+{% endblock %}
