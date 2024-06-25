@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="bg-body-tertiary">
+<html>
 <head>
     <meta charset="UTF-8"/>
     <title>Boxspot</title>
@@ -8,6 +8,10 @@
           integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
     <style>
+      body {
+        background-color: #fff0f0; /* Light grey background color */
+        color: white; /* Text color */
+      }
       .content {
         min-height: calc(100vh - 200px); /* Adjust this value based on the footer height */
         display: flex;
@@ -50,7 +54,7 @@
     </style>
 </head>
 
-<body class="bg-body-tertiary">
+<body>
   {% include "layouts/navbar.html" %}
   
   <div class="container content mt-3">

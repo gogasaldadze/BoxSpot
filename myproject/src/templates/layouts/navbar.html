@@ -27,12 +27,15 @@
     }
     .dropdown-menu.show {
         display: block !important; /* Show the dropdown when 'show' class is added */
-        opacity: 5; /* Fade in the dropdown */
+        opacity: 1; /* Fade in the dropdown */
         transform: translateY(0); /* Move to its original position */
     }
 
     .navbar-nav .nav-link.active {
         color: white !important; /* Change color of active link to white */
+    }
+    .navbar-nav .nav-link {
+        font-weight: bold;
     }
     
 </style>
@@ -68,13 +71,17 @@
                 {{ create_navlink('main.contact', 'კონტაქტი') }}
             </div>
             
+            <!-- Register/Login Links -->
+            <form class="d-flex">
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.logout') }}" class="btn btn-danger mx-2">გამოსვლა</a>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-success mx-2">შესვლა</a>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-success">რეგისტრაცია</a>
+                {% endif %}
+            </form>
+            
             <!-- Search Form -->
-            
-            
-            <div class="navbar-nav">
-                <a class="nav-link" href="{{ url_for('main.home') }}" style="margin-right: 15px;">შესვლა</a> <!-- Added margin-right -->
-                <a class="nav-link" href="{{ url_for('main.home') }}">რეგისტრაცია</a>
-            </div>
         </div>
     </div>
 </nav>
