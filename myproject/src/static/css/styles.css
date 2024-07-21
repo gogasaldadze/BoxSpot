@@ -1,0 +1,84 @@
+body {
+    background-color: #fff0f0; /* Light grey background color */
+    color: white; /* Text color */
+  }
+  .content {
+    min-height: calc(100vh - 200px); /* Adjust this value based on the footer height */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .footer {
+    background-color: #ffc0cb; /* Adjust this value to change footer background color */
+    padding: 20px 0;
+    text-align: center;
+  }
+
+  .footer ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+  }
+
+  .footer ul li {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  .footer ul li:last-child {
+    margin-right: 0;
+  }
+
+  .accepted-payment {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px; /* Adjust this value to control the distance from the navbar */
+  }
+
+  .accepted-payment img {
+    height: 30px;
+    width: auto;
+    margin-left: 10px; /* Adjust this value to control the space between payment method images */
+  }
+  .card-img-top {
+    width: 100%;
+    height: auto;
+}
+html * {
+    font-family: 'Noto Sans Georgian';
+}
+
+@font-face {
+  font-family: 'Noto Sans Georgian';
+  font-style: normal;
+  font-weight: 400;
+  font-stretch: 100%;
+  src: url(https://fonts.gstatic.com/s/notosansgeorgian/v42/PlIaFke5O6RzLfvNNVSitxkr76PRHBC4Ytyq-Gof7PUs4S7zWn-8YDB09HFNdpvnzGjmdZS60A.woff2) format('woff2');
+  unicode-range: U+0589, U+10A0-10FF, U+1C90-1CBA, U+1CBD-1CBF, U+2D00-2D2F;
+}
+.navbar-brand img {
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+    border-radius: 50%; /* Make the image circular */
+    margin-right: 10px; /* Optional: Add some space between the image and the text */
+}
+.dropdown-menu {
+    display: none; /* Hide the dropdown initially */
+    opacity: 0; /* Start with an opacity of 0 */
+    transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth transition for opacity and transform */
+    transform: translateY(10px); /* Initial transform for dropdown */
+}
+.dropdown-menu.show {
+    display: block !important; /* Show the dropdown when 'show' class is added */
+    opacity: 1; /* Fade in the dropdown */
+    transform: translateY(0); /* Move to its original position */
+}
+
+.navbar-nav .nav-link.active {
+    color: white !important; /* Change color of active link to white */
+}
+.navbar-nav .av-link {
+    font-weight: bold;
+}

@@ -12,6 +12,7 @@
       src: url(https://fonts.gstatic.com/s/notosansgeorgian/v42/PlIaFke5O6RzLfvNNVSitxkr76PRHBC4Ytyq-Gof7PUs4S7zWn-8YDB09HFNdpvnzGjmdZS60A.woff2) format('woff2');
       unicode-range: U+0589, U+10A0-10FF, U+1C90-1CBA, U+1CBD-1CBF, U+2D00-2D2F;
     }
+    
     .navbar-brand img {
         height: 50px;
         width: 50px;
@@ -19,25 +20,13 @@
         border-radius: 50%; /* Make the image circular */
         margin-right: 10px; /* Optional: Add some space between the image and the text */
     }
-    .dropdown-menu {
-        display: none; /* Hide the dropdown initially */
-        opacity: 0; /* Start with an opacity of 0 */
-        transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth transition for opacity and transform */
-        transform: translateY(10px); /* Initial transform for dropdown */
-    }
-    .dropdown-menu.show {
-        display: block !important; /* Show the dropdown when 'show' class is added */
-        opacity: 1; /* Fade in the dropdown */
-        transform: translateY(0); /* Move to its original position */
-    }
 
     .navbar-nav .nav-link.active {
-        color: white !important; /* Change color of active link to white */
+        color: rgb(247, 247, 247) !important; /* Change color of active link to white */
     }
     .navbar-nav .nav-link {
         font-weight: bold;
     }
-    
 </style>
 
 <nav class="navbar navbar-expand-lg" style="background-color: #ffc0cb;">
@@ -53,18 +42,16 @@
         <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 {{ create_navlink('main.home', 'მთავარი') }}
-
+                
                 <!-- Dropdown for Products -->
                 <div class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         პროდუქტები
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{{ url_for('products.products') }}">სრული პროდუქცია</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('products.products') }}">Category 1</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('products.products') }}">Category 2</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('products.products') }}">Category 3</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('products.products') }}">Category 4</a></li>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="{{ url_for('products.box_products', category='ყუთი') }}">ყუთი</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('products.paper_products', category='შესაფუთი ქაღალდი') }}">შესაფუთი ქაღალდი</a></li>
+                        <li><a class="dropdown-item" href="{{ url_for('products.accessories_products', category='აქსესუარები') }}">აქსესუარები</a></li>
                     </ul>
                 </div>
 
@@ -74,18 +61,15 @@
             <!-- Register/Login Links -->
             <form class="d-flex">
                 {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('auth.logout') }}" class="btn btn-danger mx-2">გამოსვლა</a>
+                    <a href="{{ url_for('auth.logout') }}" class="btn">გამოსვლა</a>
                 {% else %}
-                    <a href="{{ url_for('auth.login') }}" class="btn btn-success mx-2">შესვლა</a>
-                    <a href="{{ url_for('auth.register') }}" class="btn btn-success">რეგისტრაცია</a>
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-sm"><b>შესვლა</b></a>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-sm"><b>რეგისტრაცია</b></a>
                 {% endif %}
             </form>
-            
-            <!-- Search Form -->
         </div>
     </div>
 </nav>
-
 
 <!-- Bootstrap JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>

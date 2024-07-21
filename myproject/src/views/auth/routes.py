@@ -32,7 +32,7 @@ def register():
         user = User(email=form.email.data, username=form.username.data, password=form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Account created successfully!', 'success')
+        flash('თქვენ წარმტებით გაიარეთ რეგისტრაცია!', 'success')
         return redirect(url_for('auth.login'))  # Redirect to the login page after successful registration
     return render_template("register.html", form=form)
 

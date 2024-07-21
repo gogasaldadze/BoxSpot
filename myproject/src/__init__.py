@@ -1,13 +1,15 @@
 from flask import Flask
-from flask_admin.contrib.sqla import ModelView
 
+from src.admin_views import SecureModelView, ProdView,UserView
 from src.config import Config
-from src.extensions import db, login_manager,admin
+from src.extensions import db, login_manager,admin, migrate
 from src.views import main_blueprint,products_blueprint, auth_blueprint
-from src.models.user import User
-from src.models.products import Prod
+from src.models import Prod, User
+from src.commands import create_db , create_admin
+
 
 BLUEPRINTS = [main_blueprint,products_blueprint, auth_blueprint]
+COMMANDS =[create_db,create_admin ]
 
 
 
@@ -17,8 +19,7 @@ def create_app():
 
     register_extensions(app)
     register_blueprints(app)
-    with app.app_context():
-        db.create_all() 
+    register_commands(app)
 
     return app
 
@@ -27,17 +28,23 @@ def create_app():
 
 
 def register_extensions(app):
-
+    #db
     db.init_app(app)
     login_manager.init_app(app)
 
     #admin
     admin.init_app(app)
-    admin.add_view(ModelView(Prod, db.session))
-
+    admin.add_view(SecureModelView(User, db.session, name='Users'))
+    admin.add_view(ProdView(Prod, db.session, name='Products'))
+   
+    #login
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(user_id)
+    
+    #migrate
+    migrate.init_app(app,db)
+
 
 
 def register_blueprints(app):
@@ -46,4 +53,5 @@ def register_blueprints(app):
     
 
 def register_commands(app):
-    pass
+    for command in COMMANDS:
+        app.cli.add_command(command)

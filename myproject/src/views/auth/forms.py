@@ -6,7 +6,7 @@ from string import ascii_uppercase, ascii_lowercase, digits, punctuation
 
 class RegisterForm(FlaskForm):
     email = EmailField("ელექტრონული ფოსტა", validators=[DataRequired(), Email()])
-    username = StringField("მომხმარებლის სახელი", validators=[DataRequired()])
+    username = StringField("მომხმარებლის სახელი", validators=[DataRequired(),Length(min=8, max=64)])
     password = PasswordField("პაროლი", validators=[DataRequired(), Length(min=8, max=64, message="პაროლი უნდა იყოს მინიმუმ 8 სიმბოლო")])
     repeat_password = PasswordField("გაიმეორეთ პაროლი", validators=[DataRequired(), EqualTo("password", message="პაროლები არ ემთხვევა")])
     submit = SubmitField('რეგისტრაცია')
@@ -15,7 +15,7 @@ class RegisterForm(FlaskForm):
         registered_email = User.query.filter_by(email=field.data).first()
         if registered_email:
             raise ValidationError("ელექტრონული ფოსტა უკვე რეგისტრირებულია")
-
+ 
     def validate_username(self, field):
         existing_user = User.query.filter_by(username=field.data).first()
         if existing_user:
