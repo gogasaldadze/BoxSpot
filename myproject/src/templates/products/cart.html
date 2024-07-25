@@ -1,0 +1,52 @@
+{% extends "layouts/base.html" %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Your Cart</h1>
+    {% if cart_items %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Image</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>
+                                <img src="{{ url_for('static', filename='uploads/' ~ item.product.image) }}" alt="{{ item.product.name }}" class="img-thumbnail" style="width: 100px;">
+                            </td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.product.price }} ლარი</td>
+                            <td>{{ item.product.price * item.quantity }} ლარი</td>
+                            <td>
+                                <!-- Remove item form -->
+                                <form method="POST" action="{{ url_for('products.remove_from_cart', item_id=item.id) }}" style="display:inline;">
+                                    <input type="hidden" name="item_id" value="{{ item.id }}">
+                                    <button type="submit" class="btn btn-danger">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <form method="POST" action="{{ url_for('products.checkout') }}">
+            <button type="submit" class="btn btn-primary">Checkout</button>
+        </form>
+    {% else %}
+        <p>Your cart is empty.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+
+
