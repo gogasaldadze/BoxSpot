@@ -1,106 +1,228 @@
 {% from "macros.html" import create_navlink %}
-<style>
-    html * {
-        font-family: 'Noto Sans Georgian';
-    }
-    
-    @font-face {
-      font-family: 'Noto Sans Georgian';
-      font-style: normal;
-      font-weight: 400;
-      font-stretch: 100%;
-      src: url(https://fonts.gstatic.com/s/notosansgeorgian/v42/PlIaFke5O6RzLfvNNVSitxkr76PRHBC4Ytyq-Gof7PUs4S7zWn-8YDB09HFNdpvnzGjmdZS60A.woff2) format('woff2');
-      unicode-range: U+0589, U+10A0-10FF, U+1C90-1CBA, U+1CBD-1CBF, U+2D00-2D2F;
-    }
-    
-    .navbar-brand img {
-        height: 50px;
-        width: 50px;
-        object-fit: cover;
-        border-radius: 50%; /* Make the image circular */
-        margin-right: 10px; /* Optional: Add some space between the image and the text */
-    }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Navbar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        html * {
+            font-family: 'Noto Sans Georgian';
+        }
 
-    .navbar-nav .nav-link.active {
-        color: rgb(247, 247, 247) !important; /* Change color of active link to white */
-    }
-    .navbar-nav .nav-link {
-        font-weight: bold;
-    }
-</style>
+        @font-face {
+            font-family: 'Noto Sans Georgian';
+            font-style: normal;
+            font-weight: 400;
+            font-stretch: 100%;
+            src: url(https://fonts.gstatic.com/s/notosansgeorgian/v42/PlIaFke5O6RzLfvNNVSitxkr76PRHBC4Ytyq-Gof7PUs4S7zWn-8YDB09HFNdpvnzGjmdZS60A.woff2) format('woff2');
+            unicode-range: U+0589, U+10A0-10FF, U+1C90-1CBA, U+1CBD-1CBF, U+2D00-2D2F;
+        }
 
-<nav class="navbar navbar-expand-lg" style="background-color: #ffc0cb;">
-    <div class="container">
-        <a class="navbar-brand" href="/">
-            <img src="{{ url_for('static', filename='img3.jpg') }}" alt="BoxSpot Logo">
-            <h4 style="display: inline-block;">Boxspot</h4>
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                {{ create_navlink('main.home', 'მთავარი') }}
-                
-                <!-- Dropdown for Products -->
-                <div class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        პროდუქტები
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <li><a class="dropdown-item" href="{{ url_for('products.box_products', category='ყუთი') }}">ყუთი</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('products.paper_products', category='შესაფუთი ქაღალდი') }}">შესაფუთი ქაღალდი</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('products.accessories_products', category='აქსესუარები') }}">აქსესუარები</a></li>
-                    </ul>
+        .navbar-brand img {
+            height: 50px;
+            width: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .navbar {
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background-color: #b38c9f !important;
+        }
+
+        /* General link styling */
+        .navbar-nav .nav-link {
+            color: #333;
+            transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            padding: 6px 12px; /* Same padding as .btn-custom */
+            border-radius: 30px; /* Same border radius as .btn-custom */
+            display: inline-block; /* Ensure consistent box model */
+            font-weight: bold; /* Make text bold */
+        }
+
+        /* Hover and active state for links */
+        .navbar-nav .nav-link.active,
+        .navbar-nav .nav-link:hover {
+            color: #fff;
+            background-color: #e4c5d4;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Smooth shadow effect */
+        }
+
+        /* Dropdown menu styling */
+        .dropdown-menu {
+            display: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+            transform: translateY(-10px);
+        }
+
+        .dropdown-menu.show {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu .dropdown-item {
+            color: #333;
+            transition: background-color 0.3s ease, color 0.3s ease, padding 0.3s ease;
+            padding: 8px 16px;
+            font-weight: bold; /* Make dropdown items bold */
+        }
+
+        .dropdown-menu .dropdown-item:hover,
+        .dropdown-menu .dropdown-item.active {
+            background-color: #e4c5d4;
+            color: white;
+            font-weight: bold;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255, 255, 255, 1%29' stroke-width='2' linecap='round' linejoin='round' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }
+
+        .navbar-toggler {
+            border: none;
+        }
+
+        .btn-custom {
+            border-radius: 30px;
+            padding: 6px 12px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-weight: bold; /* Ensure buttons are bold */
+        }
+
+        .btn-custom:hover {
+            background-color: #e4c5d4;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg fixed-top" style="background-color: #ffc0cb;">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <img src="{{ url_for('static', filename='img3.jpg') }}" alt="BoxSpot Logo">
+                <h4 style="display: inline-block;">Boxspot</h4>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    {{ create_navlink('main.home', 'მთავარი') }}
+                    
+                    <!-- Dropdown for Products -->
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            პროდუქტები
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <li><a class="dropdown-item" href="{{ url_for('products.products', category='ყუთი') }}">ყუთი</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('products.products', category='შესაფუთი ქაღალდი') }}">შესაფუთი ქაღალდი</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('products.products', category='აქსესუარები') }}">აქსესუარები</a></li>
+                        </ul>
+                    </div>
+
+                    {{ create_navlink('main.contact', 'კონტაქტი') }}
                 </div>
+                
+               <!-- Register/Login Links -->
+                <form class="d-flex">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('auth.logout') }}" class="btn btn-custom">გამოსვლა</a>
+                        {% if current_user.role == "admin" %}
+                            <a href="{{ url_for('auth.admin_panel') }}" class="btn btn-custom"><b>ადმინის პანელი</b></a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-custom"><b>შესვლა</b></a>
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-custom"><b>რეგისტრაცია</b></a>
+                    {% endif %}
+                </form>
 
-                {{ create_navlink('main.contact', 'კონტაქტი') }}
             </div>
-            
-            <!-- Register/Login Links -->
-            <form class="d-flex">
-                {% if current_user.is_authenticated %}
-                    <a href="{{ url_for('auth.logout') }}" class="btn">გამოსვლა</a>
-                {% else %}
-                    <a href="{{ url_for('auth.login') }}" class="btn btn-sm"><b>შესვლა</b></a>
-                    <a href="{{ url_for('auth.register') }}" class="btn btn-sm"><b>რეგისტრაცია</b></a>
-                {% endif %}
-            </form>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<!-- Bootstrap JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var dropdowns = document.querySelectorAll('.dropdown-toggle');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle dropdown menu behavior
+            var dropdowns = document.querySelectorAll('.dropdown-toggle');
 
-        dropdowns.forEach(function(dropdown) {
-            dropdown.addEventListener('click', function(event) {
-                var menu = this.nextElementSibling;
-                if (menu.classList.contains('show')) {
-                    menu.classList.remove('show');
-                } else {
+            dropdowns.forEach(function(dropdown) {
+                dropdown.addEventListener('click', function(event) {
+                    var menu = this.nextElementSibling;
+                    if (menu.classList.contains('show')) {
+                        menu.classList.remove('show');
+                    } else {
+                        var openMenus = document.querySelectorAll('.dropdown-menu.show');
+                        openMenus.forEach(function(openMenu) {
+                            openMenu.classList.remove('show');
+                        });
+                        menu.classList.add('show');
+                    }
+                });
+            });
+
+            document.addEventListener('click', function(event) {
+                var isClickInside = event.target.closest('.nav-item.dropdown');
+                if (!isClickInside) {
                     var openMenus = document.querySelectorAll('.dropdown-menu.show');
                     openMenus.forEach(function(openMenu) {
                         openMenu.classList.remove('show');
                     });
-                    menu.classList.add('show');
                 }
             });
-        });
 
-        document.addEventListener('click', function(event) {
-            var isClickInside = event.target.closest('.nav-item.dropdown');
-            if (!isClickInside) {
-                var openMenus = document.querySelectorAll('.dropdown-menu.show');
-                openMenus.forEach(function(openMenu) {
-                    openMenu.classList.remove('show');
+            // Change navbar background on scroll
+            window.addEventListener('scroll', function() {
+                var navbar = document.querySelector('.navbar');
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Handle active state for nav links
+            var navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+
+            navLinks.forEach(function(link) {
+                link.addEventListener('click', function() {
+                    navLinks.forEach(function(i) {
+                        i.classList.remove('active');
+                    });
+                    this.classList.add('active');
                 });
-            }
+            });
+
+            // Handle active state for dropdown items
+            var dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+            
+            dropdownItems.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    dropdownItems.forEach(function(i) {
+                        i.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
         });
-    });
-</script>
+    </script>
+</body>
+</html>

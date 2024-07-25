@@ -2,51 +2,77 @@
 {% block body %}
 
 <div class="container mt-5">
-     <!-- Display flash messages -->
-     {% set messages = get_flashed_messages() %}
-     {% if messages %}
-         <div class="alert alert-danger" role="alert">
-             {% for message in messages %}
-                 <p>{{ message }}</p>
-             {% endfor %}
-         </div>
-     {% endif %}
+    <!-- Display flash messages -->
+    {% set messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="alert alert-danger" role="alert">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
     <h1>{{ product.name }}</h1>
     <img src="{{ url_for('static', filename='uploads/' ~ product.image) }}" class="card-img-top" alt="{{ product.name }}" style="width: 300px; height: auto;">
     <p class="card-text">{{ product.description }}</p>
     <p>Price: {{ product.price }}</p>
     <div class="card-body">
-        <form method="POST" action="">
+        <form method="POST" action="{{ url_for('products.place_order', product_id=product.id) }}">
             {{ form.hidden_tag() }}
             <div class="mb-3">
-                {{ form.name.label(class="form-label") }}
-                {{ form.name(class="form-control", placeholder="შეიყვანეთ შემკვეთის სახელი ") }}
-                {{ form.id.label(class="form-label") }}
-                {{ form.id(class="form-control", placeholder="შეიყვანეთ შემკვეთის საკადასტრო კოდი ") }}
+                <label for="name" class="form-label">{{ form.name.label }}</label>
+                {{ form.name(class="form-control", placeholder="შეიყვანეთ შემკვეთის სახელი") }}
+                {% if form.name.errors %}
+                    <div class="text-danger mt-1">
+                        {% for error in form.name.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="id" class="form-label">{{ form.id.label }}</label>
+                {{ form.id(class="form-control", placeholder="შეიყვანეთ საკადასტრო კოდი") }}
                 {% if form.id.errors %}
-                        <div class="text-danger mt-1">
-                            {% for error in form.id.errors %}
-                                <small>{{ error }}</small>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                
-                {{ form.email.label(class="form-label") }}
-                {{ form.email(class="form-control", placeholder="შეიყვანეთ შემკვეთის ელექტრონული ფოსტა ") }}
-                {{ form.quantity.label(class="form-label") }}
+                    <div class="text-danger mt-1">
+                        {% for error in form.id.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">{{ form.email.label }}</label>
+                {{ form.email(class="form-control", placeholder="შეიყვანეთ ელექტრონული ფოსტა") }}
+                {% if form.email.errors %}
+                    <div class="text-danger mt-1">
+                        {% for error in form.email.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="quantity" class="form-label">{{ form.quantity.label }}</label>
                 {{ form.quantity(class="form-control", placeholder="რაოდენობა") }}
-                <div class="d-grid">
-                    {{ form.submit(class="btn btn-dark btn-block") }}
-                </div>
+                {% if form.quantity.errors %}
+                    <div class="text-danger mt-1">
+                        {% for error in form.quantity.errors %}
+                            <small>{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
 
-
-
+            <div class="d-grid">
+                {{ form.submit(class="btn btn-dark btn-block") }}
+            </div>
+        </form>
+        <a href="javascript:history.back()" class="btn btn-secondary mt-3">უკან დაბრუნება</a>
     </div>
-
-    <a href="javascript:history.back()" class=  "btn btn-secondary mt-3">  უკან დაბრუნება</a>
-
 </div>
 
 {% endblock %}
-
-

@@ -1,10 +1,10 @@
 from flask import Flask
 
-from src.admin_views import SecureModelView, ProdView,UserView
+from src.admin_views import SecureModelView, ProdView,UserView, OrderView
 from src.config import Config
 from src.extensions import db, login_manager,admin, migrate
 from src.views import main_blueprint,products_blueprint, auth_blueprint
-from src.models import Prod, User
+from src.models import Prod, User, Order
 from src.commands import create_db , create_admin
 
 
@@ -36,12 +36,14 @@ def register_extensions(app):
     admin.init_app(app)
     admin.add_view(SecureModelView(User, db.session, name='Users'))
     admin.add_view(ProdView(Prod, db.session, name='Products'))
+    admin.add_view(OrderView(Order, db.session, name = "Orders"))
    
     #login
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(user_id)
-    
+    login_manager.login_view = "auth.login"
+    login_manager.login_message ="გთხოვთ გაიარეთ ავტორიზაცია"
     #migrate
     migrate.init_app(app,db)
 

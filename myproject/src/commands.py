@@ -4,6 +4,9 @@ from src.extensions import db
 from src.models import User
 from werkzeug.security import generate_password_hash
 
+#flask db migrate -m " " 
+#flask db upgrade 
+
 
 @click.command("create_db")
 @with_appcontext

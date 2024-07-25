@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, flash, redirect, url_for
+from flask import render_template, Blueprint, flash, redirect, url_for, request
 from flask_login import login_user, logout_user
 from os import path
 
@@ -18,10 +18,20 @@ def login():
         if not user:
             flash ("მომხმარებელი ვერ მოიძებნა")
             return redirect(url_for("auth.login"))
-        if user.password == form.password.data:
-            login_user(user)
+        
+        if not user.check_password(form.password.data):
+            flash ("პაროლი არასწორია, გთხოვთ შეიყვანოთ სწორი პაროლი")
+            return redirect(url_for("auth.login"))
         else:
-            flash ("პაროლი არასწორია")
+            login_user(user)
+          
+        next = request.args.get("next")
+        if next:
+            return redirect(next)
+        else:
+            return redirect("/")
+
+        
         
     return render_template("login.html", form=form)
 
@@ -33,7 +43,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash('თქვენ წარმტებით გაიარეთ რეგისტრაცია!', 'success')
-        return redirect(url_for('auth.login'))  # Redirect to the login page after successful registration
+        return redirect(url_for('auth.login'))  
     return render_template("register.html", form=form)
 
 @auth_blueprint.route("/logout")
@@ -41,3 +51,7 @@ def logout():
     logout_user()
     flash("თქვენ დალოგაუთდით")
     return redirect("/")
+
+@auth_blueprint.route("/admin")
+def admin_panel():
+    return redirect('/admin')

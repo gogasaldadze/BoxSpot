@@ -1,0 +1,75 @@
+{% extends "layouts/base.html" %}
+
+{% block styles %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+    .container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+    h1 {
+        color: #2c3e50;
+    }
+    p {
+        font-size: 16px;
+        line-height: 1.5;
+    }
+    .error {
+        color: red;
+        font-weight: bold;
+    }
+    .success {
+        color: green;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Order Confirmation</h1>
+
+    {% if success %}
+        <p class="success">{{ success_message }}</p>
+    {% else %}
+        <p class="error">{{ error_message }}</p>
+    {% endif %}
+
+    <p>Thank you for your order! You will receive an invoice via email shortly. If you have any questions or need further assistance, please contact us.</p>
+
+    <a href="{{ url_for('products.product_detail', product_id=product_id) }}">Return to Product Details</a>
+</div>
+
+<script>
+document.querySelector('form').addEventListener('submit', function (event) {
+    event.preventDefault();
+    const form = event.target;
+
+    fetch(form.action, {
+        method: form.method,
+        body: new FormData(form)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.invoice_url) {
+            const a = document.createElement('a');
+            a.href = data.invoice_url;
+            a.download = data.invoice_url.split('/').pop();
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        }
+        if (data.redirect_url) {
+            window.location.href = data.redirect_url;
+        }
+    })
+    .catch(error => console.error('Error:', error));
+});
+</script>
+{% endblock %}
