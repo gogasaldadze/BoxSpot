@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+{%extends "layouts/base.html" %}
+
+{%block body%}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +11,7 @@
 <body>
     <div class="container mt-5">
         <h2>Checkout Form</h2>
-        <form method="POST" action="{{ url_for('checkout') }}">
+        <form method="POST" action="{{ url_for('products.checkout') }}">
             {{ form.hidden_tag() }}
             <div class="mb-3">
                 {{ form.name.label(class="form-label") }}
@@ -32,13 +34,7 @@
                     <div class="text-danger">{{ error }}</div>
                 {% endfor %}
             </div>
-            <div class="mb-3">
-                {{ form.quantity.label(class="form-label") }}
-                {{ form.quantity(class="form-control") }}
-                {% for error in form.quantity.errors %}
-                    <div class="text-danger">{{ error }}</div>
-                {% endfor %}
-            </div>
+           
             <div class="mb-3">
                 {{ form.submit(class="btn btn-primary") }}
             </div>
@@ -46,3 +42,4 @@
     </div>
 </body>
 </html>
+{%endblock%}

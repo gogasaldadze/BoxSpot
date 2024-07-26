@@ -12,7 +12,6 @@ class OrderForm(FlaskForm):
     name = StringField("მყიდველის სახელი", validators=[DataRequired()])
     id = IntegerField("საკადასტრო კოდი", validators=[DataRequired()])
     email = EmailField("ელექტრონული ფოსტა", validators=[DataRequired(), Email()])
-    quantity = IntegerField("რაოდენობა", validators=[DataRequired()])
     submit = SubmitField('შეკვეთის გაფორმება')
 
 

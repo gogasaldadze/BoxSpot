@@ -26,3 +26,11 @@ class Order(db.Model):
     @property
     def user_name(self):
         return self.user.username
+    
+    @product_name.setter
+    def product_name(self, value):
+        self._product_name = value
+
+    @user_name.setter
+    def user_name(self,value):
+       self._user_name = value 

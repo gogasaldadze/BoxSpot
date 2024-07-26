@@ -70,15 +70,11 @@ def view_cart():
     cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
     return render_template('cart.html', cart_items=cart_items)
 
-
-
 @products_blueprint.route("/update_cart", methods=["POST"])
 @login_required
 def update_cart():
-    # Logic to update cart items
-    # Extract item_id and quantity from form data and update the cart
-    item_id = request.form.get("item_id")
-    quantity = request.form.get("quantity")
+    item_id = request.form.get('item_id')
+    quantity = request.form.get('quantity')
 
     cart_item = CartItem.query.get_or_404(item_id)
     if cart_item.user_id == current_user.id:
@@ -89,8 +85,6 @@ def update_cart():
         flash('Error updating cart.')
 
     return redirect(url_for('products.view_cart'))
-
-
 
 @products_blueprint.route("/remove_from_cart/<int:item_id>", methods=["POST"])
 @login_required
@@ -105,48 +99,74 @@ def remove_from_cart(item_id):
     
     return redirect(url_for('products.view_cart'))
 
+@products_blueprint.route("/order_confirmation")
+@login_required
+def order_confirmation():
+    product_id = request.args.get('product_id')
+    if not product_id:
+        flash('Product ID is missing.')
+        return redirect(url_for('products.view_cart'))
 
-@products_blueprint.route("/checkout", methods=["POST"])
+    success_message = "თქვენი შეკვეთა მიღებულია!"
+    error_message = "დაფიქსირდა შეცდომა, გთხოვთ სცადოთ ხელახლა "
+
+    return render_template(
+        'order_confirmation.html',
+        product_id=product_id,
+        success=True,
+        success_message=success_message,
+        error_message=error_message
+    )
+
+@products_blueprint.route("/checkout", methods=["GET", "POST"])
 @login_required
 def checkout():
+    form = OrderForm()
     cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
-    
+
     if not cart_items:
         flash('Your cart is empty.')
         return redirect(url_for('products.view_cart'))
-    
-    total_price = sum(item.product.price * item.quantity for item in cart_items)
-    
-    for item in cart_items:
-        order = Order(
-            product_id=item.product_id,
-            product_name=item.product_name,
-            user_id=current_user.id,
-            user_name=current_user.username,
-            quantity=item.quantity,
-            total_price=item.product.price * item.quantity
-        )
-        db.session.add(order)
-    
-    # Clear the cart after checkout
-    CartItem.query.filter_by(user_id=current_user.id).delete()
-    
-    db.session.commit()
-    flash('Order placed successfully.')
-    
-    # Generate PDF invoice
-    for item in cart_items:
-        generate_pdf_invoice(
-            product_id=item.product_id,
-            buyer_name=current_user.username,
-            buyer_id=current_user.id,
-            email=current_user.email,
-            quantity=item.quantity,
-            unit_price=item.product.price,
-            total_price=item.product.price * item.quantity
-        )
-    
-    return redirect(url_for('products.view_orders'))
+
+    if form.validate_on_submit():
+        # Store product_ids before deleting cart items
+        product_ids = [item.product_id for item in cart_items]
+
+        # Process the form data and create orders
+        for item in cart_items:
+            order = Order(
+                product_id=item.product_id,
+                product_name=item.product_name,
+                user_id=current_user.id,
+                user_name=form.name.data,
+                quantity=item.quantity,
+                total_price=item.quantity * item.product.price
+            )
+            db.session.add(order)
+
+        db.session.commit()
+
+        # Generate PDF invoices for each cart item
+        for item in cart_items:
+            generate_pdf_invoice(
+                product_id=item.product_id,
+                buyer_name=form.name.data,
+                buyer_id=form.id.data,
+                email=form.email.data,
+                quantity=item.quantity,
+                unit_price=item.product.price,
+                total_price=item.quantity * item.product.price
+            )
+
+        # Clear the cart after checkout
+        CartItem.query.filter_by(user_id=current_user.id).delete()
+        db.session.commit()
+
+        flash('Order placed successfully.')
+        # Pass the product_id of the first product in the cart for confirmation
+        return redirect(url_for('products.order_confirmation', product_id=product_ids[0]))
+
+    return render_template('checkout.html', form=form)
 
 def generate_pdf_invoice(product_id, buyer_name, buyer_id, email, quantity, unit_price, total_price):
     product = Prod.query.get_or_404(product_id)
@@ -155,15 +175,15 @@ def generate_pdf_invoice(product_id, buyer_name, buyer_id, email, quantity, unit
     if not os.path.exists(invoice_dir):
         os.makedirs(invoice_dir)
 
-    invoice_filename = f"invoice_{current_user.username}_{datetime.now().strftime('%Y-%m-%d')}.pdf"
+    invoice_filename = f"invoice_{buyer_name}_{datetime.now().strftime('%Y-%m-%d')}.pdf"
     invoice_path = os.path.join(invoice_dir, invoice_filename)
 
     doc = SimpleDocTemplate(invoice_path, pagesize=letter, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=18)
 
     styles = getSampleStyleSheet()
     header_style = styles['Title']
-    section_style = ParagraphStyle(name='Section', fontSize=12, fontName='BPGGlahoSylfaen', spaceAfter=10)
-    normal_style = ParagraphStyle(name='Normal', fontSize=10, fontName='BPGGlahoSylfaen', spaceAfter=10)
+    section_style = ParagraphStyle(name='Section', fontSize=12, fontName='Helvetica-Bold', spaceAfter=10)
+    normal_style = ParagraphStyle(name='Normal', fontSize=10, fontName='Helvetica', spaceAfter=10)
     
     content = []
     content.append(Paragraph("Invoice", header_style))
@@ -194,8 +214,8 @@ def generate_pdf_invoice(product_id, buyer_name, buyer_id, email, quantity, unit
         ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('FONTNAME', (0, 0), (-1, 0), 'BPGGlahoSylfaen'),
-        ('FONTNAME', (0, 1), (-1, -1), 'BPGGlahoSylfaen'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
         ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
         ('GRID', (0, 0), (-1, -1), 1, colors.black),
         ('BOX', (0, 0), (-1, -1), 1, colors.black),
