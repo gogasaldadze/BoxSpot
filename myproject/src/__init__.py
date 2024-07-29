@@ -2,7 +2,7 @@ from flask import Flask
 
 from src.admin_views import SecureModelView, ProdView,UserView, OrderView
 from src.config import Config
-from src.extensions import db, login_manager,admin, migrate
+from src.extensions import db, login_manager,admin, migrate, mail
 from src.views import main_blueprint,products_blueprint, auth_blueprint
 from src.models import Prod, User, Order
 from src.commands import create_db , create_admin
@@ -46,6 +46,9 @@ def register_extensions(app):
     login_manager.login_message ="გთხოვთ გაიარეთ ავტორიზაცია"
     #migrate
     migrate.init_app(app,db)
+
+    #mail
+    mail.init_app(app)
 
 
 

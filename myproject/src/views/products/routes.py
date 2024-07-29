@@ -6,10 +6,11 @@ import os
 
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle, Spacer, Image
 from reportlab.lib import colors
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfbase import pdfmetrics
+from reportlab.lib.units import inch
 
 from src.config import Config
 from src.models import Prod, Order, CartItem
@@ -125,7 +126,7 @@ def checkout():
     cart_items = CartItem.query.filter_by(user_id=current_user.id).all()
 
     if not cart_items:
-        flash('Your cart is empty.')
+        flash('თქვენი კალათა ცარიელია')
         return redirect(url_for('products.view_cart'))
 
     if form.validate_on_submit():
@@ -146,17 +147,13 @@ def checkout():
 
         db.session.commit()
 
-        # Generate PDF invoices for each cart item
-        for item in cart_items:
-            generate_pdf_invoice(
-                product_id=item.product_id,
-                buyer_name=form.name.data,
-                buyer_id=form.id.data,
-                email=form.email.data,
-                quantity=item.quantity,
-                unit_price=item.product.price,
-                total_price=item.quantity * item.product.price
-            )
+        # Generate a single PDF invoice for all cart items
+        generate_pdf_invoice(
+            buyer_name=form.name.data,
+            buyer_id=form.id.data,
+            email=form.email.data,
+            cart_items=cart_items
+        )
 
         # Clear the cart after checkout
         CartItem.query.filter_by(user_id=current_user.id).delete()
@@ -168,9 +165,8 @@ def checkout():
 
     return render_template('checkout.html', form=form)
 
-def generate_pdf_invoice(product_id, buyer_name, buyer_id, email, quantity, unit_price, total_price):
-    product = Prod.query.get_or_404(product_id)
-    
+
+def generate_pdf_invoice(buyer_name, buyer_id, email, cart_items):
     invoice_dir = os.path.join(Config.INVOICE_DIRECTORY, "invoices")
     if not os.path.exists(invoice_dir):
         os.makedirs(invoice_dir)
@@ -180,56 +176,77 @@ def generate_pdf_invoice(product_id, buyer_name, buyer_id, email, quantity, unit
 
     doc = SimpleDocTemplate(invoice_path, pagesize=letter, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=18)
 
-    styles = getSampleStyleSheet()
-    header_style = styles['Title']
-    section_style = ParagraphStyle(name='Section', fontSize=12, fontName='Helvetica-Bold', spaceAfter=10)
-    normal_style = ParagraphStyle(name='Normal', fontSize=10, fontName='Helvetica', spaceAfter=10)
-    
+    # Define styles using the registered Georgian font
+    header_style = ParagraphStyle(name='Header', fontSize=18, fontName='BPGGlahoSylfaen', spaceAfter=10, alignment=1)
+    section_style = ParagraphStyle(name='Section', fontSize=12, fontName='BPGGlahoSylfaen', spaceAfter=10)
+    normal_style = ParagraphStyle(name='Normal', fontSize=10, fontName='BPGGlahoSylfaen', spaceAfter=10)
+    footer_style = ParagraphStyle(name='Footer', fontSize=8, fontName='BPGGlahoSylfaen', alignment=1)
+
+    # Path to the logo image
+    logo_path = os.path.join(Config.BASE_DIRECTORY, 'static', 'logo.png')
+
     content = []
+
+    # Add logo
+    if os.path.exists(logo_path):
+        logo = Image(logo_path, width=2*inch, height=2*inch)
+        logo.hAlign = 'LEFT'
+        content.append(logo)
+
+    content.append(Spacer(1, 12))
     content.append(Paragraph("Invoice", header_style))
     content.append(Paragraph(f"Date: {datetime.now().strftime('%Y-%m-%d')}", normal_style))
-    content.append(Paragraph("Currency: Lari", normal_style))
-    content.append(Paragraph("<br />", normal_style))
+    content.append(Paragraph("Currency: ლარი", normal_style))
+    content.append(Spacer(1, 12))
 
-    content.append(Paragraph("Seller Information", section_style))
-    content.append(Paragraph("Name: Natia Dvalishvili", normal_style))
-    content.append(Paragraph("Address: Tbilisi, 5th Plato, 3rd Corp. Apt. 30", normal_style))
-    content.append(Paragraph("Phone: (+995)599541791", normal_style))
-    content.append(Paragraph("Bank Details: Bank of Georgia, GE96BG0000000498866105", normal_style))
-    content.append(Paragraph("<br />", normal_style))
+    content.append(Paragraph("გამყიდველის ინფორმაცია", section_style))
+    content.append(Paragraph("სახელწოდება:ი /მ ,,ნათია დვალიშვილი   Natia Dvalishvili", normal_style))
+    content.append(Paragraph("მისამართი: თბილისი მე-5 პლატო, მე-3 კორპ. ბ.30", normal_style))
+    content.append(Paragraph("ნომერი: (+995)599541791", normal_style))
+    content.append(Paragraph("საბანკო რეკვიზიტები: საქართველოს ბანკი, GE96BG0000000498866105", normal_style))
+    content.append(Spacer(1, 12))
 
-    content.append(Paragraph("Buyer Information", section_style))
-    content.append(Paragraph(f"Name: {buyer_name}", normal_style))
-    content.append(Paragraph(f"ID: {buyer_id}", normal_style))
-    content.append(Paragraph(f"Email: {email}", normal_style))
-    content.append(Paragraph("<br />", normal_style))
+    content.append(Paragraph("მყიდველის ინფორმაცია", section_style))
+    content.append(Paragraph(f"სახელწოდება: {buyer_name}", normal_style))
+    content.append(Paragraph(f"საკადასტრო კოდი/პირადი ნომერი: {buyer_id}", normal_style))
+    content.append(Paragraph(f"ელ-ფოსტა: {email}", normal_style))
+    content.append(Spacer(1, 12))
 
-    table_data = [
-        ["#", "Product Description", "Quantity", "Unit Price", "Total"],
-        [1, product.description, quantity, unit_price, total_price]
-    ]
+    table_data = [["#", "პროდ. აღწერა", "რაოდ", "ერთ ფასი", "სულ"]]
+    total_price = 0
+
+    for index, item in enumerate(cart_items, start=1):
+        product = Prod.query.get_or_404(item.product_id)
+        item_total = item.quantity * item.product.price
+        total_price += item_total
+        table_data.append([index, product.description, item.quantity, item.product.price, item_total])
     
-    table = Table(table_data, hAlign='LEFT')
+    table = Table(table_data, hAlign='LEFT', colWidths=[30, 250, 60, 60, 60])
     table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
         ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-        ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
+        ('FONTNAME', (0, 0), (-1, 0), 'BPGGlahoSylfaen'),
+        ('FONTNAME', (0, 1), (-1, -1), 'BPGGlahoSylfaen'),
         ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
         ('GRID', (0, 0), (-1, -1), 1, colors.black),
         ('BOX', (0, 0), (-1, -1), 1, colors.black),
         ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.lightgrey)
     ]))
 
     content.append(table)
-    content.append(Paragraph("<br />", normal_style))
+    content.append(Spacer(1, 12))
     
-    content.append(Paragraph(f"Total Amount Due: {total_price} Lari", section_style))
-    content.append(Paragraph("<br />", normal_style))
+    content.append(Paragraph(f"სულ გადასახდელია: {total_price} ლარი", section_style))
+    content.append(Spacer(1, 12))
     
-    content.append(Paragraph("Thank you for your order!", normal_style))
-    
+    content.append(Paragraph("მადლობას გიხდით შეკვეთისათვის!", normal_style))
+    content.append(Spacer(1, 24))
+
+    # Footer
+    content.append(Paragraph(" Boxspot | 23 Merab Kostava st.  | (+955)599541791 ", footer_style))
+
     try:
         doc.build(content)
         print(f"Invoice successfully created at: {invoice_path}")

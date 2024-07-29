@@ -14,6 +14,9 @@ class User(db.Model,UserMixin):
     _password = db.Column(db.String, nullable = False)
     role = db.Column(db.String, default = 'member')
 
+    active = db.Column(db.Boolean, default = False)
+    
+
 
 
     @property

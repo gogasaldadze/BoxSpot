@@ -30,6 +30,7 @@
         }
 
         .navbar {
+            background-color: #fda7b5; /* Default navbar color */
             transition: background-color 0.3s ease;
         }
 
@@ -122,7 +123,7 @@
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg fixed-top" style="background-color: #ffc0cb;">
+    <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
             <a class="navbar-brand" href="/">
                 <img src="{{ url_for('static', filename='img3.jpg') }}" alt="BoxSpot Logo">
@@ -180,6 +181,7 @@
 
             dropdowns.forEach(function(dropdown) {
                 dropdown.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent the default anchor behavior
                     var menu = this.nextElementSibling;
                     if (menu.classList.contains('show')) {
                         menu.classList.remove('show');
@@ -211,30 +213,6 @@
                 } else {
                     navbar.classList.remove('scrolled');
                 }
-            });
-
-            // Handle active state for nav links
-            var navLinks = document.querySelectorAll('.navbar-nav .nav-link');
-
-            navLinks.forEach(function(link) {
-                link.addEventListener('click', function() {
-                    navLinks.forEach(function(i) {
-                        i.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                });
-            });
-
-            // Handle active state for dropdown items
-            var dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
-            
-            dropdownItems.forEach(function(item) {
-                item.addEventListener('click', function() {
-                    dropdownItems.forEach(function(i) {
-                        i.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                });
             });
         });
     </script>
