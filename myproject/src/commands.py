@@ -29,7 +29,8 @@ def create_admin():
         email="saldadzegog@gmail.com",
         username="saldadzeadminer",
         password="Saldadzee!23",
-        role="admin"
+        role="admin", 
+        active = True
     )
 
     db.session.add(user)

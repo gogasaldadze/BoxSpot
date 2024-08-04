@@ -27,11 +27,10 @@
                             <td>{{ item.product.price }} ლარი</td>
                             <td>{{ item.product.price * item.quantity }} ლარი</td>
                             <td>
-                                <!-- Remove item form -->
-                                <form method="POST" action="{{ url_for('products.remove_from_cart', item_id=item.id) }}" style="display:inline;">
-                                    <input type="hidden" name="item_id" value="{{ item.id }}">
-                                    <button type="submit" class="btn btn-danger">Remove</button>
-                                </form>
+                                <!-- Remove item button triggers modal -->
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmationModal" data-item-id="{{ item.id }}">
+                                    Remove
+                                </button>
                             </td>
                         </tr>
                     {% endfor %}
@@ -45,8 +44,50 @@
         <p>Your cart is empty.</p>
     {% endif %}
 </div>
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">დარწმუნდით</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ნამდვილად გსურთ ნივთის კალათიდან წაშლა?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">უკან დაბრუნება</button>
+                <button type="button" id="confirm-remove" class="btn btn-danger">წაშლა</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var itemIdToRemove;
+
+    // Capture item ID when button is clicked
+    document.querySelectorAll('button[data-bs-target="#confirmationModal"]').forEach(function(button) {
+        button.addEventListener('click', function(event) {
+            itemIdToRemove = this.getAttribute('data-item-id');
+        });
+    });
+
+    // Handle confirmation button click
+    document.getElementById('confirm-remove').addEventListener('click', function() {
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '{{ url_for("products.remove_from_cart") }}';
+        
+        var input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'item_id';
+        input.value = itemIdToRemove;
+        form.appendChild(input);
+
+        document.body.appendChild(form);
+        form.submit();
+    });
+</script>
 {% endblock %}
-
-
-
-

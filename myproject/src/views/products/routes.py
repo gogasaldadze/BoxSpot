@@ -16,6 +16,7 @@ from src.config import Config
 from src.models import Prod, Order, CartItem
 from src.views.products.forms import OrderForm, AddToCartForm, RemoveFromCartForm, UpdateCartForm
 from src.extensions import db
+from src.utilis import send_invoice_email
 
 TEMPLATES_FOLDER = os.path.join(Config.BASE_DIRECTORY, "templates", "products")
 products_blueprint = Blueprint("products", __name__, template_folder=TEMPLATES_FOLDER)
@@ -87,17 +88,21 @@ def update_cart():
 
     return redirect(url_for('products.view_cart'))
 
-@products_blueprint.route("/remove_from_cart/<int:item_id>", methods=["POST"])
+@products_blueprint.route("/remove_from_cart", methods=["POST"])
 @login_required
-def remove_from_cart(item_id):
-    cart_item = CartItem.query.get_or_404(item_id)
-    if cart_item.user_id == current_user.id:
-        db.session.delete(cart_item)
-        db.session.commit()
-        flash('Product removed from cart!')
+def remove_from_cart():
+    item_id = request.form.get("item_id")  # Get the item_id from the form data
+    if item_id:
+        cart_item = CartItem.query.get_or_404(item_id)
+        if cart_item.user_id == current_user.id:
+            db.session.delete(cart_item)
+            db.session.commit()
+            flash('Product removed from cart!')
+        else:
+            flash('Error removing product from cart!')
     else:
-        flash('Error removing product from cart!')
-    
+        flash('No item ID provided!')
+
     return redirect(url_for('products.view_cart'))
 
 @products_blueprint.route("/order_confirmation")
@@ -148,12 +153,15 @@ def checkout():
         db.session.commit()
 
         # Generate a single PDF invoice for all cart items
-        generate_pdf_invoice(
+        invoice_path = generate_pdf_invoice(
             buyer_name=form.name.data,
             buyer_id=form.id.data,
             email=form.email.data,
             cart_items=cart_items
         )
+
+        # Send invoice via email
+        send_invoice_email(form.email.data, invoice_path)
 
         # Clear the cart after checkout
         CartItem.query.filter_by(user_id=current_user.id).delete()

@@ -1,6 +1,7 @@
 from wtforms.fields import SelectField
 from flask_admin.form import ImageUploadField
 
+
 from src.admin_views.base import SecureModelView
 from src.config import Config
 
@@ -23,6 +24,8 @@ class ProdView(SecureModelView):
         'image': ImageUploadField
     }
     form_args = {'image':{'base_path':Config.UPLOAD_DIRECTORY},
-                 'category':{'choices':['ყუთი','შესაფუთი ქაღალდი','აქსესუარები']}
+                 'category':{'choices':['ყუთი','შესაფუთი ქაღალდი','აქსესუარები','offer']}
                  
                  }
+    
+    

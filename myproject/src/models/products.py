@@ -12,4 +12,7 @@ class Prod(db.Model,UserMixin):
     description = db.Column(db.String, nullable = False)
     category = db.Column(db.String, nullable = False)
     price = db.Column(db.Integer, nullable = False)
-    image = db.Column(db.String)
+    image = db.Column(db.String, nullable = False)
+
+
+

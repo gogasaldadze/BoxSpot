@@ -1,5 +1,33 @@
 {% extends "layouts/base.html" %}
 {% block body %}
+<style>
+ 
+
+    /* General styling for the card */
+    .card {
+        transition: transform 0.5s ease, box-shadow 0.5s ease; /* Smooth transition for scaling and shadow */
+        border: none; /* Optional: Remove card border */
+        border-radius: 15px; /* Optional: Rounded corners */
+    }
+
+    /* Styling for the card image */
+    .card-img-top {
+        width: 100%;
+        height: 300px; /* Adjust this value as needed */
+        object-fit: cover; /* Ensures images cover the container */
+    }
+
+    /* Zoom effect on hover */
+    .card:hover {
+        transform: scale(1.05); /* Zoom in by 5% */
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Add shadow for 3D effect */
+    }
+    
+    /* Card body styling */
+    .card-body {
+        padding: 15px; /* Adjust padding if needed */
+    }
+</style>
 
 <div class="container mt-5">
     <h1>Box Products</h1>
