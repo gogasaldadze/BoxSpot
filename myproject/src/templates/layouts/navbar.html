@@ -98,48 +98,59 @@
             color: #e54416;
             transform: scale(1.05);
         }
+        /* Update dropdown content style */
+        /* Update dropdown content style */
         .menu .dropdown-content {
-            display: none;
+            display: block; /* Always keep it block to allow transition */
             position: absolute;
             top: 100%;
             left: 0;
-            width: 250px; /* Adjust width as needed */
+            width: 250px;
             background: #fda7b5;
             padding: 1em;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
             z-index: 10;
-            transition: opacity 0.5s ease, transform 0.5s ease;
             opacity: 0;
             transform: translateY(-20px);
-            padding: 5;
+            visibility: hidden; /* Initially hidden */
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s;
         }
+
         .menu .dropdown-content.show {
-            display: block;
             opacity: 1;
             transform: translateY(0);
-            padding: 5;
+            visibility: visible; /* Set visible when showing */
+            transition-delay: 0s; /* Remove delay when showing */
         }
-        .dropdown-content ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            padding: 5;
-        }
-        .dropdown-content li {
-            margin: 0.5em 0;
-            padding: 5;
-        }
+
         .dropdown-content a {
             font-size: 1.2em;
             color: #141212;
             text-decoration: none;
-            transition: color 0.3s;
-            padding: 5;
+            transition: color 0.3s ease, transform 0.3s ease;
+            padding: 5px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #fda7b5;
         }
+
         .dropdown-content a:hover {
             color: #e54416;
-            padding: 5;
+            transform: translateX(5px);
         }
+
+        .dropdown-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .dropdown-content li {
+            margin: 0.5em 0;
+        }
+
+  
+
         .social-media {
             margin: 2em 0;
         }
@@ -195,53 +206,99 @@
             color: #e54416; /* Optional: Change color on hover for a stylish effect */
             background-color: transparent;
         }
+        .login-btn {
+            font-size: 1.5em;
+            cursor: pointer;
+            color: rgb(10, 10, 10);
+            font-weight: 700;
+            border: none;
+            background: none;
+            transition: color 0.3s;
+        }
+        
+        .login-btn:hover {
+            color: #e54416;
+            background-color: transparent;
+        }
+
+        .logout-btn, .admin-btn {
+            font-size: 1.2em; /* Smaller font size */
+            padding: 5px 10px; /* Adjust padding */
+            cursor: pointer;
+            color: rgb(10, 10, 10);
+            font-weight: 500; /* Slightly less bold */
+            border: none;
+            background: none;
+            transition: color 0.3s;
+        }
+        
+        .logout-btn:hover, .admin-btn:hover {
+            color: #e54416;
+            background-color: transparent;
+        }
+        
+        
         
         
     </style>
 </head>
 <body>
     <header>
-        <nav id="navbar">
-            <div class="menu">
-                <div class="close-menu">
-                    <i class="fas fa-times" id="close-menu-btn"></i>
+        <!-- Navbar HTML -->
+<nav id="navbar">
+    <div class="menu">
+        <div class="close-menu">
+            <i class="fas fa-times" id="close-menu-btn"></i>
+        </div>
+        <img src="{{ url_for('static', filename='images.jpg') }}" class="menu-logo" alt="Menu Logo" id="menu-logo">
+        <ul>
+            <li><a href="{{ url_for('main.home') }}" id="home-link">მთავარი</a></li>
+            <li id="products-item">
+                <a href="#" id="products-link">პროდუქტები</a>
+                <div class="dropdown-content" id="dropdown-content">
+                    <ul>
+                        <li><a href="{{ url_for('products.products', category='box') }}">ყუთი</a></li>
+                        <li><a href="{{ url_for('products.products', category='paper') }}">შესაფუთი ქაღალდი</a></li>
+                        <li><a href="{{ url_for('products.products', category='accessories') }}">აქსესუარები</a></li>
+                        <li><a href="{{ url_for('products.products', category='offer') }}">შეთავაზებები</a></li>
+                    </ul>
                 </div>
-                <img src="{{ url_for('static', filename='images.jpg') }}" class="menu-logo" alt="Menu Logo" id="menu-logo">
-                <ul>
-                    <li><a href="{{ url_for('main.home') }}" id="home-link">მთავარი</a></li>
-                    <li id="products-item">
-                        <a href="#" id="products-link">პროდუქტები</a>
-                        <div class="dropdown-content" id="dropdown-content">
-                            <ul>
-                                <li><a href="{{ url_for('products.products', category='box') }}">ყუთი</a></li>
-                                <li><a href="{{ url_for('products.products', category='paper') }}">შესაფუთი ქაღალდი</a></li>
-                                <li><a href="{{ url_for('products.products', category='accessories') }}">აქსესუარები</a></li>
-                                <li><a href="{{ url_for('products.products', category='offer') }}">შეთავაზებები</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li><a href="{{ url_for('main.contact') }}" id="contact-link">კონტაქტი</a></li>
-                </ul>
-                <ul class="social-media">
-                    <li><a href="#"><i class="fab fa-facebook"></i></a></li>
-                    <li><a href="#"><i class="fab fa-instagram"></i></a></li>
-                </ul>
-            </div>
-            <div class="container">
-                <img src="{{ url_for('static', filename='images.jpg') }}" class="logo" alt="Logo">
-                <a href="{{ url_for('main.home') }}" class="brand"> <b>Boxspot </b></a>
-                <div class="menu-icons">
-                    <i class="fas fa-bars" id="menu-btn"></i>
-                    <a href="{{ url_for('products.view_cart') }}" class="btn btn-outline-primary cart-btn">
-                        <i class="fas fa-shopping-cart"></i> 
+            </li>
+            <li><a href="{{ url_for('main.contact') }}" id="contact-link">კონტაქტი</a></li>
+        </ul>
+        <ul class="social-media">
+            <li><a href="#"><i class="fab fa-facebook"></i></a></li>
+            <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+        </ul>
+    </div>
+    <div class="container">
+        <img src="{{ url_for('static', filename='images.jpg') }}" class="logo" alt="Logo">
+        <a href="{{ url_for('main.home') }}" class="brand"><b>Boxspot</b></a>
+        <div class="menu-icons">
+            <i class="fas fa-bars" id="menu-btn"></i>
+            <a href="{{ url_for('products.view_cart') }}" class="btn btn-outline-primary cart-btn">
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+            
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-primary logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+                {% if current_user.is_admin %}
+                    <a href="{{ url_for('admin.index') }}" class="btn btn-outline-primary admin-btn">
+                        <i class="fas fa-user-shield"></i>
                     </a>
-                </div>
-            </div>
+                {% endif %}
+            {% else %}
+                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary login-btn">
+                    <i class="fas fa-user"></i>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
 
-            
 
-            
-        </nav>
        
     </header>
 
@@ -255,20 +312,21 @@
             const menuLogo = document.getElementById('menu-logo');
             const productsItem = document.getElementById('products-item');
             const dropdownContent = document.getElementById('dropdown-content');
-
+        
             const toggleMenu = () => {
                 menu.classList.toggle('menu-open');
                 menuBtn.style.display = menu.classList.contains('menu-open') ? 'none' : 'block';
             };
-
+        
             menuBtn.addEventListener('click', toggleMenu);
             closeMenuBtn.addEventListener('click', toggleMenu);
             menuLogo.addEventListener('click', toggleMenu);
-
+        
             productsItem.addEventListener('click', (event) => {
+                event.stopPropagation();
                 dropdownContent.classList.toggle('show');
             });
-
+        
             document.addEventListener('click', (event) => {
                 if (!menu.contains(event.target) && !menuBtn.contains(event.target) && !closeMenuBtn.contains(event.target) && !productsItem.contains(event.target)) {
                     menu.classList.remove('menu-open');
@@ -276,17 +334,19 @@
                     dropdownContent.classList.remove('show');
                 }
             });
-
+        
             // Set active link based on current page
             const currentPath = window.location.pathname.split('/').pop();
             const links = document.querySelectorAll('nav a');
-
+        
             links.forEach(link => {
                 if (link.getAttribute('href') === currentPath) {
                     link.classList.add('active-link');
                 }
             });
         });
+        
+        
     </script>
 </body>
 </html>

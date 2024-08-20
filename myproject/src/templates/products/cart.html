@@ -92,29 +92,37 @@
     document.addEventListener('DOMContentLoaded', () => {
         const confirmationModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
         let itemIdToRemove = null;
-
-        document.querySelectorAll('.btn-remove').forEach(button => {
+    
+        // Attach event listeners to the remove buttons
+        document.querySelectorAll('[data-bs-target="#confirmationModal"]').forEach(button => {
             button.addEventListener('click', function() {
                 itemIdToRemove = this.getAttribute('data-item-id');
-                confirmationModal.show();
             });
         });
-
+    
+        // Handle the confirmation modal's remove button click
         document.getElementById('confirm-remove').addEventListener('click', () => {
             if (itemIdToRemove) {
-                fetch(`/remove-item/${itemIdToRemove}`, { method: 'DELETE' })
-                    .then(response => {
-                        if (response.ok) {
-                            location.reload();
-                        } else {
-                            console.error('Failed to remove item');
-                        }
-                    })
-                    .catch(error => console.error('Error:', error));
+                fetch('/remove_from_cart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `item_id=${itemIdToRemove}`
+                })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        console.error('Failed to remove item');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
                 confirmationModal.hide();
             }
         });
     });
+    
 </script>
 
 

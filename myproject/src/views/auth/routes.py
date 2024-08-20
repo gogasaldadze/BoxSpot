@@ -54,15 +54,15 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if not user:
-            flash("User not found.")
+            flash("მომხმარებელი ვერ მოიძებნა")
             return redirect(url_for("auth.login"))
         
         if not user.active:
-            flash("Your account is not active. Please check your email to activate it.")
+            flash("თქვენი ექაუნთი არ არის აქტიური, გთხოვთ შეამოწმოთ ელ-ფოსტა ექაუნთის გასააქტიურებლად.")
             return redirect(url_for("auth.login"))
         
         if not user.check_password(form.password.data):
-            flash("Incorrect password. Please try again.")
+            flash("პაროლი არასწორია, სცადეთ ხელახლა.")
             return redirect(url_for("auth.login"))
         
         login_user(user)
@@ -74,7 +74,7 @@ def login():
 @auth_blueprint.route("/logout")
 def logout():
     logout_user()
-    flash("You have been logged out.")
+    flash("თქვენ გამოხვედით")
     return redirect("/")
 
 # @auth_blueprint.route("/admin")

@@ -24,7 +24,7 @@ class ProdView(SecureModelView):
         'image': ImageUploadField
     }
     form_args = {'image':{'base_path':Config.UPLOAD_DIRECTORY},
-                 'category':{'choices':['ყუთი','შესაფუთი ქაღალდი','აქსესუარები','offer']}
+                 'category':{'choices':['box','paper','accessories','offer']}
                  
                  }
     
