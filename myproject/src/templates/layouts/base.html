@@ -11,47 +11,112 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    
+
     <style>
         body {
-            background-color: #fff0f0; /* Light grey background color */
-            color: rgb(10, 10, 10); /* Text color */
+            background-color: #fff0f0;
+            color: rgb(10, 10, 10);
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
-            min-height: 100vh; /* Ensure body takes full viewport height */
+            min-height: 100vh;
         }
-
+        
         .content {
-            flex: 1; /* Takes up remaining space between header and footer */
-            padding-top: 80px; /* Adjust this value to add space between navbar and content */
+            flex: 1;
+            padding-top: 80px; /* Adjust according to the height of your navbar */
         }
-
+        
         .footer {
-            background-color: #fda7b5; /* Footer background color */
-            padding: 20px 0;
+            background-color: #272525;
+            color: #fff;
+            padding: 10px;
             text-align: center;
+            position: relative; /* Change to fixed to keep it at the bottom */
+            bottom: 0;
+            width: 100%;
         }
-
-        .footer ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px; /* Reduced spacing for a compact footer */
+        }
+        
+        .footer-links {
             display: flex;
             justify-content: center;
-            gap: 10px; /* Space between social media icons */
+            gap: 30px;
         }
-
-        .footer ul li a img {
-            height: 30px;
-            width: auto;
+        
+        .footer-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
         }
-
-        .active-link {
+        
+        .footer-links a:hover {
+            color: #fda7b5;
+        }
+        
+        .social-media {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .social-media a {
+            color: #fff;
+            font-size: 1.2rem; /* Slightly smaller icon size */
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        
+        .social-media a:hover {
+            color: #fda7b5;
+            transform: scale(1.2);
+        }
+        
+        .rights {
+            font-size: 14px;
+            color: #aaa;
+        }
+        
+        .powered-by {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #888;
+            animation: pulse 2s infinite ease-in-out;
+        }
+        
+        .powered-by a {
             font-weight: bold;
-            color: #007bff; /* Highlight color for active link */
+            color: #fda7b5;
+            text-decoration: none;
+            transition: color 0.3s ease;
         }
+        
+        .powered-by a:hover {
+            color: #fff;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
     </style>
 </head>
 <body>
@@ -63,56 +128,25 @@
     </div>
 
     <footer class="footer">
-        <div class="container">
-            <ul class="social-media">
-                <li><a href="https://www.facebook.com/profile.php?id=100064800199230" target="_blank"><img src="{{ url_for('static', filename='179319.png') }}" alt="Facebook"></a></li>
-                <li><a href="https://www.instagram.com/boxspot__/" target="_blank"><img src="{{ url_for('static', filename='inst.webp') }}" alt="Instagram"></a></li>
-                <!-- Add more social media icons as needed -->
-            </ul>
-            <p>&copy; 2024 Boxspot. ყველა უფლება დაცულია.</p>
-            <p><a href="#"><b>FAQ</b></a></p>
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#">Home</a>
+                <a href="#">Products</a>
+                <a href="#">Contact</a>
+                <a href="#">FAQ</a>
+            </div>
+            <div class="social-media">
+                <a href="https://www.facebook.com/profile.php?id=100064800199230" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.instagram.com/boxspot__/" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
+            <p class="rights">&copy; 2024 Boxspot. ყველა უფლება დაცულია.</p>
+        </div>
+        <div class="powered-by">
+            Powered by <a href="https://www.linkedin.com/in/giorgi-saldadze-595062256/">Giorgi Saldadze</a>
         </div>
     </footer>
 
     <!-- Bootstrap JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-6Cq9QnZ1L/qfpIN7DSxHp5Wq2rX5tiJ6bZCPDGYB2qD/6stmbmRhbF2C2oS1JAXe" crossorigin="anonymous"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const menuBtn = document.getElementById('menu-btn');
-            const closeMenuBtn = document.getElementById('close-menu-btn');
-            const menu = document.querySelector('.menu');
-            const menuLogo = document.getElementById('menu-logo');
-            const productsItem = document.getElementById('products-item');
-            const dropdownContent = document.getElementById('dropdown-content');
-
-           
-
-            menuBtn.addEventListener('click', toggleMenu);
-            closeMenuBtn.addEventListener('click', toggleMenu);
-            menuLogo.addEventListener('click', toggleMenu);
-
-            productsItem.addEventListener('click', (event) => {
-                dropdownContent.classList.toggle('show');
-            });
-
-            document.addEventListener('click', (event) => {
-                if (!menu.contains(event.target) && !menuBtn.contains(event.target) && !closeMenuBtn.contains(event.target) && !productsItem.contains(event.target)) {
-                    menu.classList.remove('menu-open');
-                    menuBtn.style.display = 'block';
-                    dropdownContent.classList.remove('show');
-                }
-            });
-
-            // Set active link based on current page
-            const currentPath = window.location.pathname.split('/').pop();
-            const links = document.querySelectorAll('nav a');
-
-            links.forEach(link => {
-                if (link.getAttribute('href') === currentPath) {
-                    link.classList.add('active-link');
-                }
-            });
-        });
-    </script>
 </body>
 </html>

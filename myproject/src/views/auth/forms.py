@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from src.models.user import User
-from wtforms.fields import StringField, PasswordField, SubmitField, EmailField
+from wtforms.fields import StringField, PasswordField, SubmitField, EmailField, IntegerField
 from wtforms.validators import DataRequired, EqualTo, Length, ValidationError, Email
 from string import ascii_uppercase, ascii_lowercase, digits, punctuation
 
@@ -9,6 +9,7 @@ class RegisterForm(FlaskForm):
     username = StringField("მომხმარებლის სახელი", validators=[DataRequired(),Length(min=8, max=64)])
     password = PasswordField("პაროლი", validators=[DataRequired(), Length(min=8, max=64, message="პაროლი უნდა იყოს მინიმუმ 8 სიმბოლო")])
     repeat_password = PasswordField("გაიმეორეთ პაროლი", validators=[DataRequired(), EqualTo("password", message="პაროლები არ ემთხვევა")])
+    phone = IntegerField('ტელეფონის ნომერი', validators =[DataRequired()])
     submit = SubmitField('რეგისტრაცია')
 
     def validate_email(self, field):

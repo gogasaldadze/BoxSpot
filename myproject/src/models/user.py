@@ -13,6 +13,7 @@ class User(db.Model,UserMixin):
     username = db.Column(db.String, nullable = False)
     _password = db.Column(db.String, nullable = False)
     role = db.Column(db.String, default = 'member')
+    phone = db.Column(db.Integer, nullable = False)
 
     active = db.Column(db.Boolean, default = False)
     
@@ -31,7 +32,7 @@ class User(db.Model,UserMixin):
         return check_password_hash(self.password, password)
 
 
-
+    @property
     def is_admin(self):
         return self.role == 'admin'
 

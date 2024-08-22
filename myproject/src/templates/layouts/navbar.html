@@ -27,7 +27,7 @@
             padding: 1em 1.5em;
             z-index: 10;
             background: #fda7b5;
-            transition: background 0.3s ease;
+            transition: background 0.2s ease;
         }
         .brand {
             font-size: 1.3em;
@@ -107,14 +107,14 @@
             left: 0;
             width: 250px;
             background: #fda7b5;
-            padding: 1em;
-            border-radius: 8px;
+            padding: 2em;
+            border-radius: 80px;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
             z-index: 10;
             opacity: 0;
-            transform: translateY(-20px);
+            transform: translateX(-40px);
             visibility: hidden; /* Initially hidden */
-            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s linear 0.3s;
+            transition: opacity 0.5s ease, transform 0.5s ease, visibility 0s linear 0.3s;
         }
 
         .menu .dropdown-content.show {
@@ -188,25 +188,14 @@
         .menu-icons {
             display: flex;
             align-items: center;
-            gap: 45px; /* Adjust space between menu and cart icons */
+            gap: 15px; /* Adjust this value to make icons closer or further apart */
         }
         
-        .cart-btn {
-            padding-left: 0;
-            font-size: 1.5em; /* Increase the size for a bolder appearance */
-            cursor: pointer;
-            color: rgb(10, 10, 10); /* Set the icon color to white */
-            font-weight: 700; /* Make the icon bold */
-            border: none; /* Remove any border or outline */
-            background: none; /* Remove background */
-            transition: color 0.3s;
+        .cart-btn, .login-btn {
+            padding: 0; /* Remove padding if you want icons to be closer */
         }
         
-        .cart-btn:hover {
-            color: #e54416; /* Optional: Change color on hover for a stylish effect */
-            background-color: transparent;
-        }
-        .login-btn {
+        .cart-btn, .login-btn {
             font-size: 1.5em;
             cursor: pointer;
             color: rgb(10, 10, 10);
@@ -216,10 +205,11 @@
             transition: color 0.3s;
         }
         
-        .login-btn:hover {
+        .cart-btn:hover, .login-btn:hover {
             color: #e54416;
             background-color: transparent;
         }
+        
 
         .logout-btn, .admin-btn {
             font-size: 1.2em; /* Smaller font size */

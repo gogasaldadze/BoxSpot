@@ -3,75 +3,69 @@
 {% block styles %}
 <style>
     body {
-        font-family: Arial, sans-serif;
-        line-height: 1.6;
+        font-family: 'Helvetica Neue', sans-serif;
+        background-color: #f3f3f3;
         margin: 0;
         padding: 0;
-        background-color: #f8f9fa; /* Set background color */
     }
     .container {
-        width: 80%; /* Set width to 80% of the viewport */
-        margin: 50px auto; /* Center the container horizontally */
-        padding: 20px;
-        background-color: #f2f2f2; /* Set container background color */
-        border-radius: 10px; /* Add border radius for container */
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box shadow for container */
+        width: 80%;
+        max-width: 1000px;
+        margin: 50px auto;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
     }
     h2 {
-        margin-bottom: 20px;
-        color: #007bff; /* Set heading color */
+        font-size: 2.8em;
+        color: #222;
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 40px;
     }
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
+    .contact-info {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        padding: 0 40px 40px;
     }
-    th, td {
-        padding: 15px; /* Increase padding for cells */
-        border-bottom: 1px solid #dee2e6; /* Change border color */
+    .contact-info div {
+        display: flex;
+        align-items: center;
+        font-size: 1.1em;
+        color: #555;
     }
-    th {
-        background-color: #f8f9fa; /* Change header background color */
-        text-align: left;
-        font-weight: bold; /* Make table headers bold */
-        padding-bottom: 15px; /* Add extra padding below headers */
+    .contact-info div i {
+        font-size: 1.5em;
+        margin-right: 15px;
+        color: #007bff;
     }
-    td {
-        padding-top: 10px; /* Add padding above cell content */
-        color: #000000 !important; /* Force text color to black */
-    }
-    a {
+    .contact-info div a {
         color: #007bff;
         text-decoration: none;
     }
-    .container td a {
-        color: #000000 !important; /* Force link color inside table to black */
+    .contact-info div a:hover {
+        color: #0056b3;
+    }
+    iframe {
+        width: 100%;
+        height: 800px; /* Large map height */
+        border: none;
+        border-radius: 0 0 10px 10px;
+        box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.1);
     }
 </style>
 {% endblock %}
 
 {% block body %}
 <div class="container">
-    <h2 style="color: black;">საკონტაქტო ინფორმაცია</h2>
-    <hr>
-    <table>
-        <tr>
-            <th style="color: black;"><i class="fas fa-envelope"></i> <b>ელ.ფოსტა</b></th>
-            <td style="color: black;"><a href="mailto:saldadzegoga@gmail.com" style="color: black;">saldadzegoga@gmail.com</a></td>
-        </tr>
-        <tr>
-            <th style="color: black;"><i class="fas fa-phone"></i> ტელეფონი</th>
-            <td style="color: black;"><a href="tel:+995598609901" style="color: black;">+995 598 609 901</a></td>
-        </tr>
-        <tr>
-            <th style="color: black;"><i class="fas fa-map-marker-alt"></i> მისამართი</th>
-            <td style="color: black;">23 Merab Kostava St, Tbilisi 0183</td>
-        </tr>
-    </table>
- 
-    <br> <br> <br>
-
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2978.6467774392013!2d44.782860389950045!3d41.706560397160096!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x404473409616f6d3%3A0xfde656d925825092!2sBoxspot__!5e0!3m2!1sen!2sge!4v1718560453718!5m2!1sen!2sge" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <h2>Contact Information</h2>
+    <div class="contact-info">
+        <div><i class="fas fa-envelope"></i><a href="mailto:saldadzegoga@gmail.com">saldadzegoga@gmail.com</a></div>
+        <div><i class="fas fa-phone"></i><a href="tel:+995598609901">+995 598 609 901</a></div>
+        <div><i class="fas fa-map-marker-alt"></i>23 Merab Kostava St, Tbilisi 0183</div>
+    </div>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2978.6467774392013!2d44.782860389950045!3d41.706560397160096!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x404473409616f6d3%3A0xfde656d925825092!2sBoxspot__!5e0!3m2!1sen!2sge!4v1718560453718!5m2!1sen!2sge" allowfullscreen="" loading="lazy"></iframe>
 </div>
-
 {% endblock %}

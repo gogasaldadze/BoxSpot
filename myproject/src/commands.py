@@ -29,6 +29,7 @@ def create_admin():
         email="saldadzegog@gmail.com",
         username="saldadzeadminer",
         password="Saldadzee!23",
+        phone = 598609901,
         role="admin", 
         active = True
     )

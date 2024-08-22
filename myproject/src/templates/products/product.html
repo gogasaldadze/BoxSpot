@@ -1,45 +1,144 @@
+
 {% extends "layouts/base.html" %}
 {% block body %}
 <style>
     /* General styling for the card */
     .card {
-        transition: transform 0.5s ease, box-shadow 0.5s ease; /* Smooth transition for scaling and shadow */
-        border: none; /* Optional: Remove card border */
-        border-radius: 15px; /* Optional: Rounded corners */
-        overflow: hidden; /* Ensure that content does not overflow the card boundaries */
+        transition: transform 0.5s ease, box-shadow 0.5s ease;
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+        background: #f9f9f9;
     }
 
     /* Styling for the card image */
     .card-img-top {
         width: 100%;
-        height: 200px; /* Adjust this value as needed */
-        object-fit: cover; /* Ensures images cover the container */
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+        cursor: pointer; /* Make the image look clickable */
     }
 
-    /* Zoom effect on hover */
+    /* Zoom effect on card hover */
     .card:hover {
-        transform: scale(1.05); /* Zoom in by 5% */
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Add shadow for 3D effect */
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Slight zoom effect on image hover */
+    .card:hover .card-img-top {
+        transform: scale(1.1);
     }
 
     /* Card body styling */
     .card-body {
-        padding: 15px; /* Adjust padding if needed */
+        padding: 30px;
+        text-align: center;
+    }
+
+    /* Card title styling with animation */
+    .card-title {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #333;
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Card title hover effect */
+    .card:hover .card-title {
+        color: #fda7b5;
+        transform: scale(1.1);
+    }
+
+    /* Description styling */
+    .card-text {
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #555;
+        margin-bottom: 20px;
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Description hover effect */
+    .card:hover .card-text {
+        color: #222;
+        transform: scale(1.02);
+    }
+
+    /* Structured price styling */
+    .price-container {
+        margin-top: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .price-label {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #888;
+        transition: color 0.3s ease;
+    }
+
+    .price-value {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #333;
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Price hover effect */
+    .card:hover .price-label,
+    .card:hover .price-value {
+        color: #fda7b5;
+        transform: scale(1.05);
+    }
+
+    /* Button styling */
+    .btn-dark {
+        background-color: #333;
+        border: none;
+        padding: 10px 20px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Button hover effect */
+    .btn-dark:hover {
+        background-color: #fda7b5;
+        transform: scale(1.1);
+    }
+
+    /* Fullscreen modal image styling */
+    .modal-img {
+        width: 100%;
+        height: auto;
     }
 </style>
 
+<!-- Product Grid -->
 <div class="container-fluid">
-    <h1 class="mb- text-center">Box Products</h1>
+    <h1 class="mb-4 text-center">Box Products</h1>
     <hr>
     <div class="row">
         {% for product in prod %}
         <div class="col-md-4 mb-4 d-flex justify-content-center">
             <div class="card" style="width: 100%;">
-                <img src="{{ url_for('static', filename='uploads/' ~ product.image) }}" class="card-img-top" alt="{{ product.name }}">
+                <!-- Image with click event to open modal -->
+                <img src="{{ url_for('static', filename='uploads/' ~ product.image) }}" class="card-img-top" alt="{{ product.name }}" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage('{{ url_for('static', filename='uploads/' ~ product.image) }}')">
+
                 <div class="card-body">
                     <h5 class="card-title">{{ product.name }}</h5>
-                    <p class="card-text">{{ product.description }}</p>
-                    <p><strong>Price:</strong> {{ product.price }}</p>
+                    <hr>
+                   <b> <p class="card-text">{{ product.description }}</p></b>
+                    <hr>
+                    <div class="price-container">
+                        <hr>
+                        <span class="price-label">ფასი:</span>
+                        <span class="price-value">{{ product.price }} ლარი</span>
+                    </div>
                     <a href="{{ url_for('products.product_detail', product_id=product.id) }}" class="btn btn-dark">დეტალურად</a>
                 </div>
             </div>
@@ -47,4 +146,23 @@
         {% endfor %}
     </div>
 </div>
+
+<!-- Modal to display full-resolution image -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img src="" id="modalImage" class="modal-img" alt="Product Image">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script to change image source in modal -->
+<script>
+    function showImage(src) {
+        document.getElementById('modalImage').src = src;
+    }
+</script>
+
 {% endblock %}

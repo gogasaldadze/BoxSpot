@@ -1,26 +1,30 @@
 {% extends "layouts/base.html" %}
 
 {% block body %}
-<div class="container mt-5">
+<div class="container mt-5" style="margin-bottom: 50px;"> <!-- Add margin-bottom to lift the card up -->
     <div class="row justify-content-center">
         <div class="col-lg-8 col-xl-6">
             <div class="row g-0 shadow-lg rounded overflow-hidden">
                 <!-- Product Image -->
                 <div class="col-md-6">
-                    <img src="{{ url_for('static', filename='uploads/' ~ product.image) }}" class="img-fluid" alt="{{ product.name }}" style="object-fit: cover; height: 100%; width: 100%;">
+                    <img src="{{ url_for('static', filename='uploads/' ~ product.image) }}" 
+                         class="img-fluid zoomable-image" 
+                         alt="{{ product.name }}" 
+                         style="object-fit: cover; height: 100%; width: 100%; cursor: pointer;" 
+                         data-bs-toggle="modal" data-bs-target="#imageModal">
                 </div>
                 <!-- Product Details -->
                 <div class="col-md-6 d-flex flex-column justify-content-between p-4 bg-light">
                     <div>
                         <h1 class="display-4 fw-bold mb-3">{{ product.name }}</h1>
                         <p class="text-muted mb-4">{{ product.description }}</p>
-                        <p class="h3 mb-4">Price: <span class="text-success">{{ product.price }} ლარი</span></p>
+                        <p class="h3 mb-4">ფასი: <span class="text-success">{{ product.price }} ლარი</span></p>
                     </div>
                     <div>
                         <form id="add-to-cart-form" method="POST" action="{{ url_for('products.add_to_cart', product_id=product.id) }}">
                             {{ form.hidden_tag() }}
                             <div class="mb-3">
-                                <label for="quantity" class="form-label">Quantity</label>
+                                <label for="quantity" class="form-label">რაოდენობა</label>
                                 {{ form.quantity(class="form-control", min=1, value=1) }}
                             </div>
                             <button type="button" class="btn btn-dark btn-lg w-100" data-bs-toggle="modal" data-bs-target="#confirmationModal">კალათაში დამატება</button>
@@ -33,7 +37,7 @@
     </div>
 </div>
 
-<!-- Bootstrap Modal -->
+<!-- Bootstrap Modal for Confirmation -->
 <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -47,6 +51,19 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">უარყოფა</button>
                 <button type="button" id="confirm-add-to-cart" class="btn btn-primary">თანხმობა</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Modal for Image Zoom -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body p-0">
+                <img src="{{ url_for('static', filename='uploads/' ~ product.image) }}" 
+                     class="img-fluid" 
+                     alt="{{ product.name }}">
             </div>
         </div>
     </div>

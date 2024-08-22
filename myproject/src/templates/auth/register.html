@@ -73,6 +73,18 @@
                     {% endif %}
                 </div>
 
+                <div class="mb-3">
+                    {{ form.phone.label(class="form-label") }}
+                    {{ form.phone(class="form-control", placeholder="ტელეფონის ნომერი") }}
+                    {% if form.repeat_password.errors %}
+                        <div class="text-danger mt-1">
+                            {% for error in form.phone.errors %}
+                                <small>{{ error }}</small>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+
                 <!-- Submit button -->
                 <div class="d-grid">
                     {{ form.submit(class="btn btn-primary btn-block") }}
