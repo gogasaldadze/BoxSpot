@@ -31,3 +31,7 @@ def index():
 @main_blueprint.route("/contact",methods = ["GET"])
 def contact():
     return render_template("contact.html")
+
+@main_blueprint.route('/conditions', methods =["GET"])
+def conditions():
+    return render_template("conditions.html")
