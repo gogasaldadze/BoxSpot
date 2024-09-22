@@ -24,10 +24,12 @@ products_blueprint = Blueprint("products", __name__, template_folder=TEMPLATES_F
 font_path = os.path.join(Config.BASE_DIRECTORY, 'fonts', 'bpg_glaho_sylfaen.ttf')
 pdfmetrics.registerFont(TTFont('BPGGlahoSylfaen', font_path))
 
+
 @products_blueprint.route("/products/<category>")
 def products(category):
     prod = Prod.query.filter_by(category=category).all()
     return render_template("product.html", prod=prod)
+
 
 @products_blueprint.route("/products/detail/<int:product_id>", methods=["GET", "POST"])
 @login_required
@@ -36,6 +38,7 @@ def product_detail(product_id):
     form = AddToCartForm()
     
     return render_template("product_detail.html", product=product, form=form)
+
 
 @products_blueprint.route("/products/<int:product_id>/add_to_cart", methods=["POST"])
 @login_required
@@ -46,14 +49,11 @@ def add_to_cart(product_id):
     if form.validate_on_submit():
         quantity = form.quantity.data
         
-        # Check if the product is already in the cart
         cart_item = CartItem.query.filter_by(product_id=product.id, user_id=current_user.id).first()
         
         if cart_item:
-            # Update the quantity if the item is already in the cart
             cart_item.quantity += quantity
         else:
-            # Add new item to the cart
             cart_item = CartItem(product_id=product.id, product_name=product.name, user_id=current_user.id, quantity=quantity)
             db.session.add(cart_item)
         
@@ -135,10 +135,8 @@ def checkout():
         return redirect(url_for('products.view_cart'))
 
     if form.validate_on_submit():
-        # Store product_ids before deleting cart items
         product_ids = [item.product_id for item in cart_items]
 
-        # Process the form data and create orders
         for item in cart_items:
             order = Order(
                 product_id=item.product_id,

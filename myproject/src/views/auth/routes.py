@@ -76,7 +76,3 @@ def logout():
     logout_user()
     flash("თქვენ გამოხვედით")
     return redirect("/")
-
-# @auth_blueprint.route("/admin")
-# def admin_panel():
-#     return redirect('/admin')

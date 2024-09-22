@@ -3,12 +3,12 @@ from flask import Flask
 from src.admin_views import SecureModelView, ProdView,UserView, OrderView
 from src.config import Config
 from src.extensions import db, login_manager,admin, migrate, mail
-from src.views import main_blueprint,products_blueprint, auth_blueprint
+from src.views import main_blueprint,products_blueprint, auth_blueprint, order_blueprint
 from src.models import Prod, User, Order
 from src.commands import create_db , create_admin
 
 
-BLUEPRINTS = [main_blueprint,products_blueprint, auth_blueprint]
+BLUEPRINTS = [main_blueprint,products_blueprint, auth_blueprint, order_blueprint]
 COMMANDS =[create_db,create_admin ]
 
 

@@ -36,17 +36,19 @@
             position: relative; /* Change to fixed to keep it at the bottom */
             bottom: 0;
             width: 100%;
+            margin-top: auto;
         }
         
         .footer-content {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 15px; /* Reduced spacing for a compact footer */
+            gap: 15px;
         }
         
         .footer-links {
             display: flex;
+            flex-wrap: wrap; /* Allow wrapping for small screens */
             justify-content: center;
             gap: 30px;
         }
@@ -88,7 +90,6 @@
             margin-top: 10px;
             font-size: 14px;
             color: #888;
-            animation: pulse 2s infinite ease-in-out;
         }
         
         .powered-by a {
@@ -101,28 +102,26 @@
         .powered-by a:hover {
             color: #fff;
         }
-        
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                opacity: 1;
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column; /* Stack items in the footer on small screens */
             }
-            50% {
-                transform: scale(1.05);
-                opacity: 0.8;
+            .footer-links {
+                flex-direction: column; /* Stack footer links */
+                align-items: center; /* Center align */
             }
-            100% {
-                transform: scale(1);
-                opacity: 1;
+            .social-media {
+                flex-direction: row; /* Keep social media icons inline */
             }
         }
-        
     </style>
 </head>
 <body>
     {% include "layouts/navbar.html" %}
 
-    <div class="container content mt-3">
+    <div class="container-fluid content mt-3"> <!-- Using container-fluid for full width -->
         {% block body %}
         {% endblock %}
     </div>

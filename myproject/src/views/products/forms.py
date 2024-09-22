@@ -12,6 +12,7 @@ class OrderForm(FlaskForm):
     name = StringField("მყიდველის სახელი", validators=[DataRequired()])
     id = IntegerField("საკადასტრო კოდი", validators=[DataRequired()])
     email = EmailField("ელექტრონული ფოსტა", validators=[DataRequired(), Email()])
+    phone = IntegerField("ტელეფონის ნომერი", validators = [DataRequired()])
     submit = SubmitField('შეკვეთის გაფორმება')
 
 
@@ -21,6 +22,10 @@ class OrderForm(FlaskForm):
         if len(data) != 9 or not data.isdigit():
             raise ValidationError("საკადასტრო კოდი უნდა შეიცავდეს 9 ციფრს")
     
+    def validate_phone(form,field):
+        data = str(field.data)
+        if len(data) != 9 or not data.isdigit():
+            raise ValidationError("გთხოვთ შეიყვანოთ სწორი ნომერი")
 
 
 

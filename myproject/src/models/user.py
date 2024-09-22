@@ -2,7 +2,6 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from src.extensions import db
-# placeholder for importing basemodel
 
 class User(db.Model,UserMixin):
     
