@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user
 from os import path
 
 from src.config import Config
-from src.views.auth.forms import RegisterForm, LoginForm
+from src.views.auth.forms import RegisterForm, LoginForm, ResetPasswordForm, ResetPasswordRequestForm
 from src.models.user import User
 from src.extensions import db
 from src.utilis import send_mail, create_key, confirm_key
@@ -76,3 +76,40 @@ def logout():
     logout_user()
     flash("თქვენ გამოხვედით")
     return redirect("/")
+
+
+
+@auth_blueprint.route("/reset_password", methods=["GET", "POST"])
+def reset_password_request():
+    form = ResetPasswordRequestForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            reset_key = create_key(form.email.data)
+            reset_link = url_for('auth.reset_password', reset_key=reset_key, _external=True)
+            html = render_template("reset_password_email.html", reset_link=reset_link)
+            send_mail("Password Reset Request", html, [form.email.data])
+        
+        flash("თუ ეს ელ.ფოსტა რეგისტრირებული იყო, გაიგებთ პაროლის აღდგენის ლინკს.")
+        return redirect(url_for('auth.login'))
+
+    return render_template("reset_password_request.html", form=form)
+
+
+@auth_blueprint.route("/reset_password/<reset_key>", methods=["GET", "POST"])
+def reset_password(reset_key):
+    email = confirm_key(reset_key)
+    if not email:
+        flash("პაროლის აღდგენის ლინკს გაუვიდა ვადა.")
+        return redirect(url_for("auth.login"))
+
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=email).first()
+        if user:
+            user.password = form.password.data  # Make sure to hash the password
+            db.session.commit()
+            flash("თქვენი პაროლი წარმატებით შეიცვალა. ახლა შეგიძლიათ შეხვიდეთ.")
+            return redirect(url_for('auth.login'))
+
+    return render_template("reset_password.html", form=form)

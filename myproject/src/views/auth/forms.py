@@ -42,3 +42,29 @@ class LoginForm(FlaskForm):
     username = StringField("მომხმარებლის სახელი", validators=[DataRequired()])
     password = PasswordField("პაროლი", validators=[DataRequired()])
     submit = SubmitField('შესვლა')
+
+
+class ResetPasswordRequestForm(FlaskForm):
+    email = StringField('ელფოსტა', validators=[DataRequired(), Email()])
+    submit = SubmitField('პაროლის აღდგენის მოთხოვნა')
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('ახალი პაროლი', validators=[DataRequired()])
+    confirm_password = PasswordField('გაიმეორეთ ახალი პაროლი', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('პაროლის აღდგენა')
+
+
+    def validate_password(self, field):
+        contains_uppercase = any(char in ascii_uppercase for char in field.data)
+        contains_lowercase = any(char in ascii_lowercase for char in field.data)
+        contains_digits = any(char in digits for char in field.data)
+        contains_punctuation = any(char in punctuation for char in field.data)
+
+        if not contains_uppercase:
+            raise ValidationError("პაროლი უნდა შეიცავდეს მინიმუმ 1 დიდ ასოს")
+        if not contains_lowercase:
+            raise ValidationError("პაროლი უნდა შეიცავდეს მინიმუმ 1 პატარა ასოს")
+        if not contains_digits:
+            raise ValidationError("პაროლი უნდა შეიცავდეს მინიმუმ 1 ციფრს")
+        if not contains_punctuation:
+            raise ValidationError("პაროლი უნდა შეიცავდეს მინიმუმ 1 სიმბოლოს")
