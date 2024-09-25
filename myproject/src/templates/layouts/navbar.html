@@ -15,7 +15,7 @@
             box-sizing: border-box;
         }
         header {
-            background: url('img1.jpg') no-repeat center;
+            
             background-size: cover;
             padding-top: 64px;
         }
@@ -258,7 +258,8 @@
                 <div class="close-menu">
                     <i class="fas fa-times" id="close-menu-btn"></i>
                 </div>
-                <img src="{{ url_for('static', filename='images.jpg') }}" class="menu-logo" alt="Menu Logo" id="menu-logo">
+                <a href="{{ url_for('main.home') }}">
+                    <img src="{{ url_for('static', filename='images.jpg') }}" class="menu-logo" alt="Menu Logo" id="menu-logo">
                 <ul>
                     <li><a href="{{ url_for('main.home') }}" id="home-link">მთავარი</a></li>
                     <li id="products-item">
@@ -275,13 +276,13 @@
                     <li><a href="{{ url_for('main.contact') }}" id="contact-link">კონტაქტი</a></li>
                 </ul>
                 <ul class="social-media">
-                    <li><a href="#"><i class="fab fa-facebook"></i></a></li>
-                    <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                    <li><a href="https://www.facebook.com/profile.php?id=100064800199230"><i class="fab fa-facebook"></i></a></li>
+                    <li><a href="https://www.instagram.com/boxspot__/"><i class="fab fa-instagram"></i></a></li>
                 </ul>
             </div>
             <div class="container">
                 <img src="{{ url_for('static', filename='images.jpg') }}" class="logo" alt="Logo">
-                <a href="{{ url_for('main.home') }}" class="brand"><b>Boxspot</b></a>
+                <a href="{{ url_for('main.home') }}" class="brand"><b></b></a>
                 <div class="menu-icons">
                     <i class="fas fa-bars" id="menu-btn"></i>
                     <a href="{{ url_for('products.view_cart') }}" class="cart-btn">

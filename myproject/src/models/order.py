@@ -4,7 +4,7 @@ from datetime import datetime
 from src.extensions import db
 
 
-# Order model
+
 class Order(db.Model):
     __tablename__ = "orders"
 

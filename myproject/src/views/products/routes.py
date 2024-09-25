@@ -91,7 +91,7 @@ def update_cart():
 @products_blueprint.route("/remove_from_cart", methods=["POST"])
 @login_required
 def remove_from_cart():
-    item_id = request.form.get("item_id")  # Get the item_id from the form data
+    item_id = request.form.get("item_id")   
     if item_id:
         cart_item = CartItem.query.get_or_404(item_id)
         if cart_item.user_id == current_user.id:
@@ -104,6 +104,8 @@ def remove_from_cart():
         flash('No item ID provided!')
 
     return redirect(url_for('products.view_cart'))
+
+
 
 @products_blueprint.route("/order_confirmation")
 @login_required
@@ -150,7 +152,7 @@ def checkout():
 
         db.session.commit()
 
-        # Generate a single PDF invoice for all cart items
+         
         invoice_path = generate_pdf_invoice(
             buyer_name=form.name.data,
             buyer_id=form.id.data,
@@ -158,15 +160,15 @@ def checkout():
             cart_items=cart_items
         )
 
-        # Send invoice via email
+         
         send_invoice_email(form.email.data, invoice_path)
 
-        # Clear the cart after checkout
+       
         CartItem.query.filter_by(user_id=current_user.id).delete()
         db.session.commit()
 
         flash('Order placed successfully.')
-        # Pass the product_id of the first product in the cart for confirmation
+        
         return redirect(url_for('products.order_confirmation', product_id=product_ids[0]))
 
     return render_template('checkout.html', form=form)
@@ -182,18 +184,18 @@ def generate_pdf_invoice(buyer_name, buyer_id, email, cart_items):
 
     doc = SimpleDocTemplate(invoice_path, pagesize=letter, rightMargin=30, leftMargin=30, topMargin=30, bottomMargin=18)
 
-    # Define styles using the registered Georgian font
+    
     header_style = ParagraphStyle(name='Header', fontSize=18, fontName='BPGGlahoSylfaen', spaceAfter=10, alignment=1)
     section_style = ParagraphStyle(name='Section', fontSize=12, fontName='BPGGlahoSylfaen', spaceAfter=10)
     normal_style = ParagraphStyle(name='Normal', fontSize=10, fontName='BPGGlahoSylfaen', spaceAfter=10)
     footer_style = ParagraphStyle(name='Footer', fontSize=8, fontName='BPGGlahoSylfaen', alignment=1)
 
-    # Path to the logo image
+     
     logo_path = os.path.join(Config.BASE_DIRECTORY, 'static', 'logo.png')
 
     content = []
 
-    # Add logo
+ 
     if os.path.exists(logo_path):
         logo = Image(logo_path, width=2*inch, height=2*inch)
         logo.hAlign = 'LEFT'
@@ -250,7 +252,7 @@ def generate_pdf_invoice(buyer_name, buyer_id, email, cart_items):
     content.append(Paragraph("მადლობას გიხდით შეკვეთისათვის!", normal_style))
     content.append(Spacer(1, 24))
 
-    # Footer
+  
     content.append(Paragraph(" Boxspot | 23 Merab Kostava st.  | (+955)599541791 ", footer_style))
 
     try:

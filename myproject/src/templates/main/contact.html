@@ -1,66 +1,118 @@
 {% extends "layouts/base.html" %}
 
-{% block styles %}
+{% block body %}
 <style>
     body {
         font-family: 'Helvetica Neue', sans-serif;
-        background-color: #f3f3f3;
+        background-color: #e9ecef; 
         margin: 0;
         padding: 0;
+        overflow-x: hidden; 
     }
-    .container {
-        width: 80%;
-        max-width: 1000px;
+
+    .container-fluid {
+        width: 90%;
+        max-width: 900px;
         margin: 50px auto;
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
+        background-color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        transition: box-shadow 0.3s ease;
+        animation: slideIn 0.5s ease forwards; 
     }
+
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
     h2 {
-        font-size: 2.8em;
-        color: #222;
+        font-size: 2.5em;
+        color: #1b1b1b;
         text-align: center;
-        margin-top: 30px;
-        margin-bottom: 40px;
+        margin: 30px 0;
+        padding: 20px 0;
+        font-weight: 700;
     }
+
     .contact-info {
         display: flex;
         flex-direction: column;
-        gap: 25px;
-        padding: 0 40px 40px;
+        gap: 20px;
+        padding: 40px;
     }
+
     .contact-info div {
         display: flex;
         align-items: center;
-        font-size: 1.1em;
-        color: #555;
+        font-size: 1.2em;
+        color: #333;
+        padding: 15px;
+        border-radius: 10px;
+        background-color: #f8f9fa;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: relative; 
     }
+
+    .contact-info div:hover {
+        background-color: #e2e6ea; 
+        transform: translateY(-5px); 
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
     .contact-info div i {
         font-size: 1.5em;
         margin-right: 15px;
-        color: #007bff;
+        color: #fda7b5; 
+        transition: transform 0.3s ease; 
     }
+
+    .contact-info div:hover i {
+        transform: scale(1.1); 
+    }
+
     .contact-info div a {
-        color: #007bff;
+        color: #fda7b5;
         text-decoration: none;
+        transition: color 0.3s ease;
+        flex: 1; 
     }
+
     .contact-info div a:hover {
-        color: #0056b3;
+        color: #fda7b5;
     }
+
     iframe {
         width: 100%;
-        height: 800px; /* Large map height */
+        height: 600px;  
         border: none;
-        border-radius: 0 0 10px 10px;
-        box-shadow: 0 -6px 18px rgba(0, 0, 0, 0.1);
+        border-radius: 0 0 15px 15px;
+        box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    iframe:hover {
+        transform: scale(1.02); 
+    }
+
+    @media (max-width: 600px) {
+        .container-fluid {
+            width: 95%;
+        }
+
+        h2 {
+            font-size: 2em;
+        }
+
+        .contact-info div {
+            font-size: 1em;
+        }
     }
 </style>
-{% endblock %}
 
-{% block body %}
-<div class="container-fluid content mt-3">
-    <h2>Contact Information</h2>
+<div class="container-fluid">
+    <h2>საკონტაქტო ინფორმაცია</h2>
     <div class="contact-info">
         <div><i class="fas fa-envelope"></i><a href="mailto:saldadzegoga@gmail.com">saldadzegoga@gmail.com</a></div>
         <div><i class="fas fa-phone"></i><a href="tel:+995598609901">+995 598 609 901</a></div>

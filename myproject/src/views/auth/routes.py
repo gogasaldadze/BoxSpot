@@ -78,7 +78,6 @@ def logout():
     return redirect("/")
 
 
-
 @auth_blueprint.route("/reset_password", methods=["GET", "POST"])
 def reset_password_request():
     form = ResetPasswordRequestForm()
@@ -90,7 +89,7 @@ def reset_password_request():
             html = render_template("reset_password_email.html", reset_link=reset_link)
             send_mail("Password Reset Request", html, [form.email.data])
         
-        flash("თუ ეს ელ.ფოსტა რეგისტრირებული იყო, გაიგებთ პაროლის აღდგენის ლინკს.")
+        flash("გთხოვთ შეამოწმოთ ელფოსტა")
         return redirect(url_for('auth.login'))
 
     return render_template("reset_password_request.html", form=form)
@@ -107,9 +106,9 @@ def reset_password(reset_key):
     if form.validate_on_submit():
         user = User.query.filter_by(email=email).first()
         if user:
-            user.password = form.password.data  # Make sure to hash the password
+            user.password = form.password.data  
             db.session.commit()
-            flash("თქვენი პაროლი წარმატებით შეიცვალა. ახლა შეგიძლიათ შეხვიდეთ.")
+            flash("თქვენი პაროლი წარმატებით შეიცვალა")
             return redirect(url_for('auth.login'))
 
     return render_template("reset_password.html", form=form)

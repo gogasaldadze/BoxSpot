@@ -3,28 +3,24 @@
 {% block body %}
 <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
     <div class="card" style="max-width: 600px; width: 100%;">
-        <!-- Display flash messages -->
-        {% set messages = get_flashed_messages() %}
+         {% set messages = get_flashed_messages() %}
         {% if messages %}
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 {% for message in messages %}
                     <p>{{ message }}</p>
                 {% endfor %}
-                <!-- Close button for the alert -->
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         {% endif %}
 
-        <!-- Login form -->
-        <div class="card-header">
+         <div class="card-header">
             <h2 class="text-center">შესვლა</h2>
         </div>
         <div class="card-body">
             <form method="POST" action="">
                 {{ form.hidden_tag() }}
 
-                <!-- Username or Email field -->
-                <div class="mb-3">
+                 <div class="mb-3">
                     {{ form.username.label(class="form-label") }}
                     {{ form.username(class="form-control", placeholder="შეიყვანეთ მომხმარებლის სახელი ") }}
                     {% if form.username.errors %}
@@ -36,8 +32,7 @@
                     {% endif %}
                 </div>
                 
-                <!-- Password field -->
-                <div class="mb-3">
+                 <div class="mb-3">
                     {{ form.password.label(class="form-label") }}
                     {{ form.password(class="form-control", placeholder="შეიყვანეთ პაროლი") }}
                     {% if form.password.errors %}
@@ -49,8 +44,7 @@
                     {% endif %}
                 </div>
 
-                <!-- Submit button -->
-                <div class="d-grid">
+                 <div class="d-grid">
                     {{ form.submit(class="btn btn-primary btn-block") }}
                 </div>
             </form>
@@ -62,7 +56,6 @@
     </div>
 </div>
 
-<!-- JavaScript to auto-dismiss the flash messages after 5 seconds -->
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const alertElement = document.querySelector('.alert');
@@ -70,7 +63,7 @@
             setTimeout(() => {
                 const bsAlert = new bootstrap.Alert(alertElement);
                 bsAlert.close();
-            }, 5000); // 5000ms = 5 seconds
+            }, 3000); 
         }
     });
 </script>
