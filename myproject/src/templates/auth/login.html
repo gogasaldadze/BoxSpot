@@ -3,17 +3,17 @@
 {% block body %}
 <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
     <div class="card" style="max-width: 600px; width: 100%;">
-         {% set messages = get_flashed_messages() %}
+        {% set messages = get_flashed_messages() %}
         {% if messages %}
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 {% for message in messages %}
                     <p>{{ message }}</p>
                 {% endfor %}
-                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         {% endif %}
 
-         <div class="card-header">
+        <div class="card-header">
             <h2 class="text-center">შესვლა</h2>
         </div>
         <div class="card-body">

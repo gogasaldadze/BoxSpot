@@ -27,11 +27,11 @@ from flask_mail import Message
 def send_invoice_email(recipient_email, invoice_path):
     with open(invoice_path, 'rb') as pdf:
         msg = Message(
-            subject="Your Invoice from Boxspot",
+            subject="Boxspot Invoice",
             sender=Config.MAIL_SENDER,
             recipients=[recipient_email]
         )
-        msg.body = "Dear Customer,\n\nPlease find attached your invoice for the recent order.\n\nThank you for your purchase!"
+        msg.body = "ძვირფასო მომხმარებელო,\n\გთხოვთ იხილოთ მიმაგრებული ფაილი ინვოისის სახით. \n\nმადლობას გიხდით შეკვეთისათვის!"
         msg.attach(
             filename=os.path.basename(invoice_path),
             content_type='application/pdf',

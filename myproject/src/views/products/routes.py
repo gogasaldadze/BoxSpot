@@ -97,9 +97,9 @@ def remove_from_cart():
         if cart_item.user_id == current_user.id:
             db.session.delete(cart_item)
             db.session.commit()
-            flash('Product removed from cart!')
+            flash('პროდუქტი წაიშალა კალათიდან!')
         else:
-            flash('Error removing product from cart!')
+            flash('დაფიქსირდა შეცდომა პროდუქტის წაშლისას!')
     else:
         flash('No item ID provided!')
 
@@ -167,7 +167,7 @@ def checkout():
         CartItem.query.filter_by(user_id=current_user.id).delete()
         db.session.commit()
 
-        flash('Order placed successfully.')
+        flash('თქვენი შეკვეთა მიღებულია')
         
         return redirect(url_for('products.order_confirmation', product_id=product_ids[0]))
 
